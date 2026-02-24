@@ -14,7 +14,9 @@ public class Employee{
     private String name;
     private String email;
     private LocalDateTime dateOfEmployment;
-    private int departmentID;
+    @ManyToOne
+    @JoinColumn(name = "departmentid")
+    private Department department;
     @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL)
     private List<Activity> activities;
 
@@ -22,10 +24,10 @@ public class Employee{
         
     }
 
-    public Employee(int id, List<Activity> activities, int departmentID, LocalDateTime dateOfEmployment, String email, String name) {
+    public Employee(int id, List<Activity> activities, Department department, LocalDateTime dateOfEmployment, String email, String name) {
         this.id = id;
         this.activities = activities;
-        this.departmentID = departmentID;
+        this.department =department;
         this.dateOfEmployment = dateOfEmployment;
         this.email = email;
         this.name = name;
@@ -47,12 +49,12 @@ public class Employee{
         this.activities = activities;
     }
 
-    public int getDepartmentID() {
-        return departmentID;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDepartmentID(int departmentID) {
-        this.departmentID = departmentID;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     public LocalDateTime getDateOfEmployment() {
@@ -82,7 +84,12 @@ public class Employee{
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Employee employee)) return false;
-        return id == employee.id && departmentID == employee.departmentID && Objects.equals(name, employee.name) && Objects.equals(email, employee.email) && Objects.equals(dateOfEmployment, employee.dateOfEmployment) && Objects.equals(activities, employee.activities);
+        return id == employee.id && Objects.equals(name, employee.name) && Objects.equals(email, employee.email) && Objects.equals(dateOfEmployment, employee.dateOfEmployment) && Objects.equals(department, employee.department) && Objects.equals(activities, employee.activities);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, email, dateOfEmployment, department, activities);
     }
 
     @Override
@@ -92,7 +99,7 @@ public class Employee{
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", dateOfEmployment=" + dateOfEmployment +
-                ", departmentID=" + departmentID +
+                ", department=" + department +
                 ", activities=" + activities +
                 '}';
     }
