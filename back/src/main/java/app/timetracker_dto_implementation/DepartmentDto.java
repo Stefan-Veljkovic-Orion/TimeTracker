@@ -2,7 +2,7 @@ package app.timetracker_dto_implementation;
 
 import app.timetracker_dto.Dto;
 
-public class DepartmentDto implements Dto {
+public class DepartmentDto {
 
     private int id;
     private String departmentName;

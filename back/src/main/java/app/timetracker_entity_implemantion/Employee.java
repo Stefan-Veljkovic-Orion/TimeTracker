@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name="employee")
-public class Employee implements MyEntity {
+public class Employee{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
