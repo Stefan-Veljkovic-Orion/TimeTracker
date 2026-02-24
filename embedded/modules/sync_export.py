@@ -1,12 +1,21 @@
 import csv
+import requests
 from datetime import datetime
 from utils.storage import load_data, EMPLOYEES_FILE
 
 def sync_employees():
     employees = load_data(EMPLOYEES_FILE)
-    print(f"Syncing {len(employees)} employees with backend...")
-    # Ovde će kasnije ići HTTP POST (requests biblioteka)
-    print("Sync completed (stub).")
+    if not employees:
+        print("No employees to sync")
+        return
+    api_url=""
+    response=requests.post(api_url, json=employees, headersheaders)
+
+    if response.status_code==200:
+        print(f"Synced {len(employees)} employees with backend")
+    else:
+        print(f"Error syncing employees: {response.status_code}{response.text}")
+    
 
 def export_employees_to_csv():
     employees = load_data(EMPLOYEES_FILE)
