@@ -1,7 +1,6 @@
 package app.timetracker_entity_implemantion;
 
 import jakarta.persistence.*;
-import app.timetracker_entity.MyEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
