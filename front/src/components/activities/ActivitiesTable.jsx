@@ -31,13 +31,16 @@ const ActivitiesTable = ({ activities }) => {
           {activities.map((activity) => (
             <tr key={activity.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {activity.employeeName}
+                {activity.employee_name}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {activity.projectName}
+                {activity.project_name}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {activity.time}
+                {new Date(activity.time_of_activity).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {activity.description}
@@ -54,9 +57,9 @@ ActivitiesTable.propTypes = {
   activities: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
-      employeeName: PropTypes.string.isRequired,
-      projectName: PropTypes.string.isRequired,
-      time: PropTypes.string.isRequired,
+      employee_name: PropTypes.string.isRequired,
+      project_name: PropTypes.string.isRequired,
+      time_of_activity: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
     }),
   ).isRequired,
