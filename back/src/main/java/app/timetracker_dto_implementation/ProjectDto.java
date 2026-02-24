@@ -1,18 +1,22 @@
 package app.timetracker_dto_implementation;
 
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
-import java.util.List;
 
 public class ProjectDto {
 
     private int id;
+
+    @NotBlank(message = "Name is required.")
     private String projectName;
-    @NotEmpty(message = "Name is required.")
-    private String description;
+
     @Size(max = 150, message = "Decription can be at most 150 characters.")
+    private String description;
+
+    @NotBlank(message = "Manager email is required")
+    @Email(message = "Manager email must be a valid email.")
     private String managerEmail;
 
     public ProjectDto() {

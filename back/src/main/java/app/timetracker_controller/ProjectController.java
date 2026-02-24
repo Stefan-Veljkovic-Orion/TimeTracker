@@ -5,6 +5,7 @@ import app.timetrack_service.ProjectService;
 import app.timetracker_dto_implementation.ProjectDto;
 import app.timetracker_entity_implemantion.Project;
 import app.timetracker_mapper.ProjectMapper;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +24,9 @@ public class ProjectController {
         this.projectMapper = projectMapper;
     }
 
-    // 🔹 CREATE
+    // CREATE
     @PostMapping
-    public ProjectDto createProject(@RequestBody ProjectDto dto) {
+    public ProjectDto createProject(@Valid @RequestBody ProjectDto dto) {
         Project project = projectMapper.toEntity(dto);
         Project saved = projectService.saveProject(project);
         return projectMapper.toDto(saved);
