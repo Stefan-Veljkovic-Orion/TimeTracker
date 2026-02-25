@@ -11,17 +11,19 @@ public class Project {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String projectName;
+    private String description;
     private String managerEmail;
     @OneToMany(mappedBy = "project",cascade = CascadeType.ALL)
     private List<Activity> activities;
 
-    public Project(int id, String managerEmail, List<Activity> activities, String projectName) {
+    public Project(int id, String projectName, String description, String managerEmail, List<Activity> activities) {
         this.id = id;
+        this.projectName = projectName;
+        this.description = description;
         this.managerEmail = managerEmail;
         this.activities = activities;
-        this.projectName = projectName;
     }
-    
+
     public Project(){
         
     }
@@ -58,15 +60,23 @@ public class Project {
         this.projectName = projectName;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Project project)) return false;
-        return id == project.id && Objects.equals(projectName, project.projectName) && Objects.equals(managerEmail, project.managerEmail) && Objects.equals(activities, project.activities);
+        return id == project.id && Objects.equals(projectName, project.projectName) && Objects.equals(managerEmail, project.managerEmail) && Objects.equals(activities, project.activities) && Objects.equals(description, project.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, projectName, managerEmail, activities);
+        return Objects.hash(id, projectName, managerEmail, activities, description);
     }
 
     @Override
@@ -74,6 +84,7 @@ public class Project {
         return "Project{" +
                 "id=" + id +
                 ", projectName='" + projectName + '\'' +
+                ", description='" + description + '\'' +
                 ", managerEmail='" + managerEmail + '\'' +
                 ", activities=" + activities +
                 '}';
