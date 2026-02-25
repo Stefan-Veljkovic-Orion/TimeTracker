@@ -1,4 +1,4 @@
-package app.timetracker_service;
+package app.timetrack_service;
 
 import app.timetrack_repository.IActivityRepository;
 import app.timetrack_repository.IEmployeeRepository;
@@ -9,7 +9,11 @@ import app.timetracker_dto_implementation.FailedActivityDto;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_entity_implemantion.Project;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,13 +67,41 @@ public class ActivityService {
         return new BulkActivityDto(savedIds, failedRecords);
     }
 
-    private String validate(ActivityDto dto) {
+    @Transactional
+    public Activity create(ActivityDto dto) {
+        Project project = projectRepository.findById(dto.getProjectId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Project not found: " + dto.getProjectId()));
+
+        Employee employee = employeeRepository.findById(dto.getEmployeeId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Employee not found: " + dto.getEmployeeId()));
+
+        Activity entity = new Activity();
+        entity.setProject(project);
+        entity.setEmployee(employee);
+        entity.setDescription(dto.getDescription());
+        entity.setTimeOfActivity(dto.getTime());
+
+        try {
+            return activityRepository.save(entity);
+        } catch (DataIntegrityViolationException e) {
+            // Unique/FK constraint errors -> 409 Conflict
+            e.getMostSpecificCause();
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Data conflict: " + e.getMostSpecificCause().getMessage(),
+                    e
+            );
+        }
+    }
+
+private String validate(ActivityDto dto) {
 
         if (dto.getEmployeeId() == null) return "EmployeeId is mandatory";
         if (dto.getProjectId() == null) return "ProjectId is mandatory";
         if (dto.getDescription() == null || dto.getDescription().isBlank()) return "Description is mandatory";
         if (dto.getTime() == null) return "Time is mandatory";
-        if (!"Orion".equals(dto.getEmail())) return "Email must be Orion";
 
         return null;
     }
