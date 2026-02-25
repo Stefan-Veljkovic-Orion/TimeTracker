@@ -22,7 +22,9 @@ public class EmployeeMapper implements DtoEntityMapper<EmpolyeeDto, Employee> {
         dto.setName(employee.getName());
         dto.setEmail(employee.getEmail());
         dto.setDateOfEmployment(employee.getDateOfEmployment());
-        dto.setDepartmentID(departmentId);
+        dto.setDepartment(employee.getDepartment());
+
+
 
         dto.setActivities(new ArrayList<>());
 
@@ -39,6 +41,7 @@ public class EmployeeMapper implements DtoEntityMapper<EmpolyeeDto, Employee> {
         employee.setName(dto.getName());
         employee.setEmail(dto.getEmail());
         employee.setDateOfEmployment(dto.getDateOfEmployment());
+        employee.setDepartment(dto.getDepartment());
 
         employee.setActivities(null);
         return employee;
