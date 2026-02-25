@@ -8,7 +8,7 @@ import requests
 import json
  
 # Učitavanje lokalnih aktivnosti (pretpostavka da ih čuvaš u fajlu)
-with open('embedded/data/activities.json', 'r') as file:
+with open('../data/activities.json', 'r') as file:
     activities_data = json.load(file)
  
 # URL vašeg Back-End API-ja (ovo treba da dogovoriš sa BE timom)
