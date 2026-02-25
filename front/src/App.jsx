@@ -4,6 +4,7 @@ import viteLogo from "/vite.svg";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Activities from "./pages/Activities";
+import ActivityEdit from "./pages/ActivityEdit";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Activities />} />
+          <Route path="/activities/:id" element={<ActivityEdit />} />
         </Route>
       </Routes>
     </BrowserRouter>

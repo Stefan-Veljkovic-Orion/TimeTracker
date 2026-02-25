@@ -1,6 +1,9 @@
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 const ActivitiesTable = ({ activities }) => {
+  const navigate = useNavigate();
+
   if (!activities || activities.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
@@ -13,7 +16,11 @@ const ActivitiesTable = ({ activities }) => {
     <div className="overflow-x-auto bg-white rounded-lg shadow">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
-          <tr>
+          <tr
+            key={activity.id}
+            onClick={() => navigate(`/activities/${activity.id}`)}
+            className="hover:bg-gray-50 cursor-pointer"
+          >
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               #
             </th>
