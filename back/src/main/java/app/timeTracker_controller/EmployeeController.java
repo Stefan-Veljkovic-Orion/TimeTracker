@@ -38,7 +38,7 @@ public class EmployeeController {
     public void exportToCSV(HttpServletResponse response) throws IOException {
 
         response.setContentType("text/csv");
-        response.setHeader("Content-Disposition", "attachment; filename=activity.csv");
+        response.setHeader("Content-Disposition", "attachment; filename=employee.csv");
         ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
         String[] header = {"ID","Date of employment", "Department", "Email", "Name"};
         String[] fieldMapping = {"id", "dateOfEmployment", "departmentName","email","name"};
