@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const apiClient = axios.create({
-  baseURL: "", // Uneti pravi URL
+  baseURL: "http://localhost:8080/activity/create", // Uneti pravi URL
   headers: {
     "Content-Type": "application/json",
   },
