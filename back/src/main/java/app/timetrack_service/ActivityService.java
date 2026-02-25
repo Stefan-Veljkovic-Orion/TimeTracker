@@ -1,8 +1,9 @@
-package app.timetracker_service;
+package app.timetrack_service;
 
 import app.timetrack_repository.IActivityRepository;
 import app.timetrack_repository.IEmployeeRepository;
 import app.timetrack_repository.IProjectRepository;
+import app.timetracker_dto_implementation.ActivityCSVDto;
 import app.timetracker_dto_implementation.ActivityDto;
 import app.timetracker_dto_implementation.BulkActivityDto;
 import app.timetracker_dto_implementation.FailedActivityDto;
@@ -26,7 +27,10 @@ public class ActivityService {
         this.employeeRepository = employeeRepository;
         this.projectRepository = projectRepository;
     }
-
+    public List<ActivityCSVDto> getAllActivity(){
+        List<Activity> lista = activityRepository.findAll();
+        return  lista.stream().map(a -> new ActivityCSVDto(a.getId(), a.getEmployee().getName(), a.getProject().getProjectName(),a.getDescription(),a.getTimeOfActivity())).toList();
+    }
     public BulkActivityDto bulkInsert(List<ActivityDto> requests) {
 
         List<Integer> savedIds = new ArrayList<>();
