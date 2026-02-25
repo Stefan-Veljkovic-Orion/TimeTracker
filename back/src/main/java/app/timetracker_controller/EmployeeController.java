@@ -1,4 +1,4 @@
-package app.timeTracker_controller;
+package app.timetracker_controller;
 
 import app.timetrack_service.EmployeeService;
 import app.timetracker_dto_implementation.EmpolyeeDto;
