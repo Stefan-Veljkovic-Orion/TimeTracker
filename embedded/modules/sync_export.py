@@ -3,6 +3,8 @@ import requests
 from datetime import datetime
 from utils.storage import load_data, EMPLOYEES_FILE
 
+
+# function for loading employees from the EMPLOYEES_FILE
 def sync_employees():
     employees = load_data(EMPLOYEES_FILE)
     if not employees:
@@ -16,14 +18,14 @@ def sync_employees():
     else:
         print(f"Error syncing employees: {response.status_code}{response.text}")'''
     
-
+# function for exporting data to CSV file
 def export_employees_to_csv():
     employees = load_data(EMPLOYEES_FILE)
     if not employees:
         print("No employees to export.")
         return
         
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")  #opening csv file for writing
     filename = f"employees_{timestamp}.csv"
     
     with open(filename, "w", newline="") as csvfile:
