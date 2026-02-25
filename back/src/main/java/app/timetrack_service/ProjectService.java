@@ -2,7 +2,9 @@ package app.timetrack_service;
 
 import app.timetrack_repository.IProjectRepository;
 import app.timetracker_entity_implemantion.Project;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -37,5 +39,20 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
+    public void deleteProject(int id) {
+
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
+
+        if (project.getActivities() != null && !project.getActivities().isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Can't delete project because it has activities linked to it"
+            );
+        }
+
+        projectRepository.delete(project);
+    }
 
 }
