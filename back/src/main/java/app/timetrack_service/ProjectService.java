@@ -29,5 +29,13 @@ public class ProjectService {
                 .orElseThrow(() -> new RuntimeException("Project not found."));
     }
 
+    public Project updateProject(int id, Project updatedProject) {
+        Project project = getProjectById(id);
+        project.setProjectName(updatedProject.getProjectName());
+        project.setDescription(updatedProject.getDescription());
+        project.setManagerEmail(updatedProject.getManagerEmail());
+        return projectRepository.save(project);
+    }
+
 
 }
