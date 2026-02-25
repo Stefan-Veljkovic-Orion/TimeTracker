@@ -10,8 +10,11 @@ import app.timetracker_dto_implementation.FailedActivityDto;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_entity_implemantion.Project;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +70,36 @@ public class ActivityService {
         return new BulkActivityDto(savedIds, failedRecords);
     }
 
-    private String validate(ActivityDto dto) {
+    @Transactional
+    public Activity create(ActivityDto dto) {
+        Project project = projectRepository.findById(dto.getProject().getId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Project not found: " + dto.getProject().getId()));
+
+        Employee employee = employeeRepository.findById(dto.getEmployee().getId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Employee not found: " + dto.getEmployee().getId()));
+
+        Activity entity = new Activity();
+        entity.setProject(project);
+        entity.setEmployee(employee);
+        entity.setDescription(dto.getDescription());
+        entity.setTimeOfActivity(dto.getTime());
+
+        try {
+            return activityRepository.save(entity);
+        } catch (DataIntegrityViolationException e) {
+            // Unique/FK constraint errors -> 409 Conflict
+            e.getMostSpecificCause();
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Data conflict: " + e.getMostSpecificCause().getMessage(),
+                    e
+            );
+        }
+    }
+
+private String validate(ActivityDto dto) {
 
         if (dto.getEmployee() == null) return "EmployeeId is mandatory";
         if (dto.getProject() == null) return "ProjectId is mandatory";

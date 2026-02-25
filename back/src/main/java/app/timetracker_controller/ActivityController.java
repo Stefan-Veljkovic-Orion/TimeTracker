@@ -2,6 +2,7 @@ package app.timetracker_controller;
 
 import app.timetracker_dto_implementation.ActivityCSVDto;
 import app.timetracker_dto_implementation.ActivityDto;
+import app.timetracker_dto_implementation.ActivityResponseDto;
 import app.timetracker_dto_implementation.BulkActivityDto;
 import app.timetrack_service.ActivityService;
 import app.timetracker_entity_implemantion.Activity;
@@ -12,7 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
-
+import app.timetracker_mapper.ActivityMapper;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,11 +28,11 @@ import java.util.List;
 public class ActivityController {
 
 
-        private final ActivityService activityService;
+    private final ActivityService activityService;
 
-        public ActivityController(ActivityService activityService) {
-            this.activityService = activityService;
-        }
+    public ActivityController(ActivityService activityService) {
+        this.activityService = activityService;
+    }
 
     @PostMapping(value = "/bulk-insert", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BulkActivityDto> bulkInsert(@RequestBody List<ActivityDto> activities) {
@@ -49,5 +56,23 @@ public class ActivityController {
 
             csvWriter.close();
     }
+
+
+    @PostMapping("/create")
+    public ResponseEntity<ActivityResponseDto> create(
+            @Valid @RequestBody ActivityDto dto,
+            UriComponentsBuilder uriBuilder) {
+
+        Activity saved = activityService.create(dto);
+
+        return ResponseEntity
+                .created(uriBuilder
+                        .path("/activities/{id}")
+                        .buildAndExpand(saved.getId())
+                        .toUri())
+                .body(ActivityResponseDto.from(saved));
+    }
+
+
 }
 

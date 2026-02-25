@@ -15,6 +15,8 @@ import org.supercsv.prefs.CsvPreference;
 
 import java.io.IOException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -30,7 +32,7 @@ public class EmployeeController {
     @PostMapping
     public EmpolyeeDto createEmployee(@Valid @RequestBody EmpolyeeDto dto) {
         Employee employee = employeeMapper.toEntity(dto);
-        Employee saved = employeeService.saveEmployee(employee, dto.getDepartmentID());
+        Employee saved = employeeService.saveEmployee(employee,dto);
         return employeeMapper.toDto(saved);
     }
 
@@ -40,14 +42,30 @@ public class EmployeeController {
         response.setContentType("text/csv");
         response.setHeader("Content-Disposition", "attachment; filename=employee.csv");
         ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] header = {"ID","Date of employment", "Department", "Email", "Name"};
-        String[] fieldMapping = {"id", "dateOfEmployment", "departmentName","email","name"};
+        String[] header = {"ID", "Date of employment", "Department", "Email", "Name"};
+        String[] fieldMapping = {"id", "dateOfEmployment", "departmentName", "email", "name"};
         csvWriter.writeHeader(header);
-        for(EmployeeCSVDto e: employeeService.getAllEmployee()){
-            csvWriter.write(e,fieldMapping);
+        for (EmployeeCSVDto e : employeeService.getAllEmployee()) {
+            csvWriter.write(e, fieldMapping);
         }
 
 
         csvWriter.close();
+    }
+    @GetMapping
+    public List<EmpolyeeDto> getAllEmployees() {
+        return employeeService.getAllEmployees()
+                .stream()
+                .map(employeeMapper::toDto)
+                .toList();
+    }
+    @GetMapping("/{id}")
+    public EmpolyeeDto getEmployeeId(@PathVariable int id) {
+        return employeeMapper.toDto(employeeService.getEmployeeId(id));
+    }
+    @PutMapping("/{id}")
+    public EmpolyeeDto updateEmployee(@PathVariable Integer id, @Valid @RequestBody EmpolyeeDto dto) {
+        Employee updated = employeeService.updateEmployee(id, dto);
+        return employeeMapper.toDto(updated);
     }
 }
