@@ -1,4 +1,4 @@
-package app.timetracker_service;
+package app.timetrack_service;
 
 import app.timetrack_repository.IActivityRepository;
 import app.timetrack_repository.IEmployeeRepository;

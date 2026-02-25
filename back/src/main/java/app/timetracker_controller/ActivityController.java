@@ -2,7 +2,7 @@ package app.timetracker_controller;
 
 import app.timetracker_dto_implementation.ActivityDto;
 import app.timetracker_dto_implementation.BulkActivityDto;
-import app.timetracker_service.ActivityService;
+import app.timetrack_service.ActivityService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

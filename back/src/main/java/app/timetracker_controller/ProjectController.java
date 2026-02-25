@@ -2,14 +2,20 @@ package app.timetracker_controller;
 
 
 import app.timetrack_service.ProjectService;
+import app.timetracker_dto_implementation.ActivityDto;
+import app.timetracker_dto_implementation.BulkActivityDto;
+import app.timetracker_dto_implementation.BulkProjectDto;
 import app.timetracker_dto_implementation.ProjectDto;
 import app.timetracker_entity_implemantion.Project;
 import app.timetracker_mapper.ProjectMapper;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 @RestController
 @RequestMapping("/projects")
@@ -30,6 +36,13 @@ public class ProjectController {
         Project project = projectMapper.toEntity(dto);
         Project saved = projectService.saveProject(project);
         return projectMapper.toDto(saved);
+    }
+    
+    //bulk insert
+    @PostMapping(value = "/bulk-insert",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BulkProjectDto> bulkInsert(@RequestBody List<ProjectDto> projects) {
+        BulkProjectDto response = projectService.bulkInsert(projects);
+        return ResponseEntity.ok(response);
     }
 
 
