@@ -1,4 +1,4 @@
-import React from "react";
+import { activityApi } from "../api/activityApi";
 
 export const activityService = async (date) => {
   return new Promise((resolve) => {
