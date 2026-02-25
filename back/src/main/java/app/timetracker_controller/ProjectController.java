@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
@@ -45,5 +46,20 @@ public class ProjectController {
         return ResponseEntity.ok(response);
     }
 
+    // GET ALL
+    @GetMapping
+    public List<ProjectDto> getAllProjects() {
+        return projectService.getAllProjects()
+                .stream()
+                .map(projectMapper::toDto)
+                .toList();
+    }
+
+
+    // GET BY ID
+    @GetMapping("/{id}")
+    public ProjectDto getProjectById(@PathVariable int id) {
+        return projectMapper.toDto(projectService.getProjectById(id));
+    }
 
 }

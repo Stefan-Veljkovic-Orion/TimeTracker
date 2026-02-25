@@ -6,7 +6,6 @@ import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_entity_implemantion.Project;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,8 +58,18 @@ public class ProjectService {
         if (dto.getDescription() == null || dto.getDescription().isBlank()) return "Description is mandatory.";
         if (dto.getDescription().length() > 150) return "Description can be at most 150 characters.";
         if (dto.getManagerEmail() == null || dto.getManagerEmail().isBlank()) return "Manager email is mandatory.";
-        if (!dto.getManagerEmail().toLowerCase().endsWith("@orion.com")) return "Manager email must be an Orion email (@orion.com).";
+        if (!dto.getManagerEmail().toLowerCase().endsWith("@orion.com"))
+            return "Manager email must be an Orion email (@orion.com).";
         return null;
+    }
+
+    public List<Project> getAllProjects() {
+        return projectRepository.findAll();
+    }
+
+    public Project getProjectById(int id) {
+        return projectRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Project not found."));
     }
 
 
