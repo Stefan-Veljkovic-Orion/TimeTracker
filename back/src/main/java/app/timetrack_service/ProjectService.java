@@ -4,6 +4,8 @@ import app.timetrack_repository.IProjectRepository;
 import app.timetracker_entity_implemantion.Project;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProjectService {
 
@@ -18,7 +20,14 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
+    public List<Project> getAllProjects() {
+        return projectRepository.findAll();
+    }
 
+    public Project getProjectById(int id) {
+        return projectRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Project not found."));
+    }
 
 
 }
