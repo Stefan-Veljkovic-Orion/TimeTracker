@@ -1,1 +1,22 @@
 @import "tailwindcss";
+/* u globalnom CSS fajlu ili unutar style tag-a */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #printableReport,
+  #printableReport * {
+    visibility: visible;
+  }
+
+  #printableReport {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0;
+    padding: 0;
+  }
+}

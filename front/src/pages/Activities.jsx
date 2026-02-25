@@ -3,6 +3,8 @@ import { useActivities } from "../hooks/useActivities";
 import ActivitiesTable from "../components/activities/ActivitiesTable";
 import ActivityFilter from "../components/activities/ActivityFilter";
 import LoadingSpinner from "../components/common/LoadingSpinner";
+import ActivityReport from "../components/reports/ActivityReport";
+import { useNavigate } from "react-router-dom";
 
 const getTodayDate = () => {
   const today = new Date();
@@ -13,10 +15,14 @@ const getTodayDate = () => {
 };
 
 const Activities = () => {
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(getTodayDate());
   const { data: activities, isLoading, error } = useActivities(selectedDate);
 
-  const handlePrint = () => window.print();
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6 print:hidden">
@@ -40,21 +46,30 @@ const Activities = () => {
           </button>
         </div>
       </div>
+
       <div className="print:hidden">
         <ActivityFilter value={selectedDate} onChange={setSelectedDate} />
       </div>
+
       {isLoading && <LoadingSpinner />}
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
           Loading error
         </div>
       )}
-      <div className="hidden print:block mb-6">
-        <h2 className="text-xl font-bold">Employee Activity Report</h2>
-        <p className="text-sm text-gray-600">Date: {selectedDate}</p>
-      </div>
+
       {!isLoading && !error && (
         <ActivitiesTable activities={activities || []} />
+      )}
+
+      {/* Aktivnost report za print */}
+      {!isLoading && !error && (
+        <div id="printableReport" className="hidden print:block">
+          <ActivityReport
+            activities={activities || []}
+            selectedDate={selectedDate}
+          />
+        </div>
       )}
     </div>
   );
