@@ -29,7 +29,7 @@ public class EmployeeController {
     }
     @GetMapping
     public List<EmpolyeeDto> getAllEmployees() {
-        return employeeService.getAllEmployee()
+        return employeeService.getAllEmployees()
                 .stream()
                 .map(employeeMapper::toDto)
                 .toList();
