@@ -1,8 +1,26 @@
 [
   {
-    "employee": "sdsd",
-    "project": "sddsd",
-    "description": "dsdsd",
-    "time": "12:30"
+    "email": "d@orion.com",
+    "project": "d",
+    "description": "d",
+    "time": "12:23"
+  },
+  {
+    "email": "d@orion.com",
+    "project": "d",
+    "description": "d",
+    "time": "12:34"
+  },
+  {
+    "email": "daviduric@orion.com",
+    "project": "d",
+    "description": "d",
+    "time": "12:56"
+  },
+  {
+    "email": "d@orion.com",
+    "project": "pr",
+    "description": "pr",
+    "time": "12:23"
   }
 ]

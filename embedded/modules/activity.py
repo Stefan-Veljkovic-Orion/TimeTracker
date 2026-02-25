@@ -1,35 +1,41 @@
-from utils.storage import load_data, save_data, ACTIVITIES_FILE
+from utils.storage import load_data, save_locally, ACTIVITIES_FILE
 from utils.validators import validate_activity
 
-# Privremene aktivnosti u memoriji
-activities_temp = []
-
 def create_activity():
-    employee = input("Enter employee name: ")
+    email = input("Enter employee mail: ")
+    # TODO da li je u redu da se uzima naziv projekta ili je potrebno project_id?
     project = input("Enter project name: ")
     description = input("Enter activity description: ")
+    # TODO u bazi je datetime a mi primamo samo HH:MM
     time_of_activity = input("Enter time of activity (HH:MM): ")
     
-    if not validate_activity(description, project, time_of_activity):
+    if not validate_activity(email, description, project, time_of_activity):
         return
         
-    activities_temp.append({
-        "employee": employee,
+    activity = {
+        "email": email,
         "project": project,
         "description": description,
         "time": time_of_activity
-    })
-    print(f"Activity for {employee} on project {project} recorded (not yet stored).")
+    }
+
+    activities = load_data(ACTIVITIES_FILE)
+    activities.append(activity)
+    save_locally(ACTIVITIES_FILE, activities)
+
+    print("Activity saved locally")
+
 
 def store_activities():
-    global activities_temp
-    if not activities_temp:
-        print("No new activities to store.")
-        return
-        
-    activities = load_data(ACTIVITIES_FILE)
-    activities.extend(activities_temp)
-    save_data(ACTIVITIES_FILE, activities)
-    activities_temp.clear()
-    print("Activities stored to DB (JSON).")
+    # global activities_temp
+    pass
+    
 
+def track_new_activities():
+    activities = load_data(ACTIVITIES_FILE)
+    print("\n--- Today's Activities ---")
+    if not activities:
+        print("No activities yet.")
+    for act in activities:
+        print(f"{act['time']} - {act['email']} - {act['project']} - {act['description']}")
+    print("--------------------------")

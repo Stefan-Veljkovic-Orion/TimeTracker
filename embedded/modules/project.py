@@ -1,4 +1,4 @@
-from utils.storage import load_data, save_data, PROJECTS_FILE
+from utils.storage import load_data, save_locally, PROJECTS_FILE
 from utils.validators import validate_project
 
 def create_project():
@@ -11,5 +11,5 @@ def create_project():
         
     projects = load_data(PROJECTS_FILE)
     projects.append({"name": name, "description": description, "manager_email": manager_email})
-    save_data(PROJECTS_FILE, projects)
+    save_locally(PROJECTS_FILE, projects)
     print(f"Project {name} created with manager {manager_email}!")

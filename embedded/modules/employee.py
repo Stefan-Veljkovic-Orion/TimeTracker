@@ -1,15 +1,15 @@
-from utils.storage import load_data, save_data
+from utils.storage import load_data, save_locally, EMPLOYEES_FILE
 from utils.validators import validate_employee
-
-# Zbog strukture foldera o kojoj smo pričali
-EMPLOYEES_FILE = "data/employees.json"
+from models.Employee import Employee
+import json
+from services.employee_service import store_data
 
 def create_employee():
     print("\n--- Create New Employee ---")
     name = input("Enter employee name: ")
     email = input("Enter employee email: ")
     date_of_employment = input("Enter date of employment (e.g. YYYY-MM-DD): ") # DODATO POLJE
-    department = input("Enter department: ")
+    department = int(input("Enter department: "))
     
     # 1. Osnovna validacija (ime i domen)
     if not validate_employee(name, email):
@@ -32,5 +32,10 @@ def create_employee():
         "department": department
     })
     
-    save_data(EMPLOYEES_FILE, employees)
+    save_locally(EMPLOYEES_FILE, employees)
     print(f"Success! Employee {name} ({email}) created successfully.")
+
+def load_employees():
+    with open("./../data/employees.json",'r', encoding='UTF-8') as file:
+        employeeList: list[Employee] = json.load(file)
+        store_data(employeeList)

@@ -9,5 +9,23 @@
     "email": "miks@orion.com",
     "date_of_employment": "2024-04-22",
     "department": "rtt"
+  },
+  {
+    "name": "David Duric",
+    "email": "d@orion.com",
+    "date_of_employment": "2021-01-01",
+    "department": "DSD"
+  },
+  {
+    "name": "Mihailo Bosnjak",
+    "email": "mihailo@orion.com",
+    "date_of_employment": "2026-02-18",
+    "department": "IT"
+  },
+  {
+    "name": "milos manic",
+    "email": "milos@orion.com",
+    "date_of_employment": "2025-02-15",
+    "department": 8
   }
 ]

@@ -9,12 +9,12 @@ def sync_employees():
         print("No employees to sync")
         return
     api_url=""
-    response=requests.post(api_url, json=employees, headersheaders)
+    # response=requests.post(api_url, json=employees, headersheaders)
 
-    if response.status_code==200:
-        print(f"Synced {len(employees)} employees with backend")
+    ''' if response.status_code==200:
+    print(f"Synced {len(employees)} employees with backend")
     else:
-        print(f"Error syncing employees: {response.status_code}{response.text}")
+        print(f"Error syncing employees: {response.status_code}{response.text}")'''
     
 
 def export_employees_to_csv():

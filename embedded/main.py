@@ -1,8 +1,9 @@
 # Uvozimo funkcije iz naših modula
-from modules.activity import create_activity, store_activities, track_new_activities
+from modules.activity import create_activity, store_activities
 from modules.employee import create_employee
 from modules.project import create_project
 from modules.sync_export import sync_employees
+from modules.tracker import track_new_activities
 
 def main_menu():
     while True:
