@@ -1,4 +1,4 @@
-package app.timetracker_controller;
+package app.timeTracker_controller;
 
 
 import app.timetrack_service.ProjectService;
@@ -6,10 +6,7 @@ import app.timetracker_dto_implementation.ProjectDto;
 import app.timetracker_entity_implemantion.Project;
 import app.timetracker_mapper.ProjectMapper;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/projects")
@@ -32,5 +29,14 @@ public class ProjectController {
         return projectMapper.toDto(saved);
     }
 
+
+    // UPDATE
+    @PutMapping("/{id}")
+    public ProjectDto updateProject(@PathVariable int id,
+                                    @Valid @RequestBody ProjectDto dto) {
+        Project project = projectMapper.toEntity(dto);
+        Project updated = projectService.updateProject(id, project);
+        return projectMapper.toDto(updated);
+    }
 
 }
