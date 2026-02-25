@@ -5,6 +5,7 @@ import app.timetracker_dto_implementation.EmpolyeeDto;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_mapper.EmployeeMapper;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,5 +43,10 @@ public class EmployeeController {
     public EmpolyeeDto updateEmployee(@PathVariable Integer id, @Valid @RequestBody EmpolyeeDto dto) {
         Employee updated = employeeService.updateEmployee(id, dto);
         return employeeMapper.toDto(updated);
+    }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@PathVariable int id) {
+        employeeService.deleteEmployee(id);
     }
 }

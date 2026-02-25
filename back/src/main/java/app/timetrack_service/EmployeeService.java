@@ -62,4 +62,14 @@ public class EmployeeService {
 
         return employeeRepository.save(employee);
     }
+    public void deleteEmployee(int id) {
+        Employee e = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found"));
+
+        if (e.getActivities() != null && !e.getActivities().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Cannot delete employee with activities");
+        }
+
+        employeeRepository.delete(e);
+    }
 }
