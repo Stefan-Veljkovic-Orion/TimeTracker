@@ -26,44 +26,23 @@ const MOCK_ACTIVITIES = [
 ];
 
 export const activityService = {
-  // GET by date
   getActivitiesByDate: async (date) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const filtered = MOCK_ACTIVITIES.filter((act) => act.date === date);
-        resolve(filtered);
-      }, 300);
-    });
+    return await activityApi.getByDate(date);
   },
 
-  // GET by id
   getActivityById: async (id) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const activity = MOCK_ACTIVITIES.find((act) => act.id === Number(id));
-        resolve(activity);
-      }, 300);
-    });
+    return await activityApi.getById(id);
   },
 
-  // UPDATE (kasnije zameni sa activityApi.update)
   updateActivity: async (id, data) => {
-    return activityApi.update({ id, data });
+    return await activityApi.update({ id, data });
   },
 
-  // DELETE
   deleteActivity: async (id) => {
-    return activityApi.delete(id);
+    return await activityApi.delete(id);
   },
 
-  // CREATE
   createActivity: async (data) => {
-    try {
-      const res = await activityApi.create(data);
-      return res;
-    } catch (err) {
-      console.error("Error creating activity:", err);
-      throw err;
-    }
+    return await activityApi.create(data);
   },
 };

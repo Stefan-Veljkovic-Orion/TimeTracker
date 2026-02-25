@@ -1,8 +1,16 @@
 import axios from "axios";
 
 export const apiClient = axios.create({
-  baseURL: "http://localhost:8080/activity/create", // Uneti pravi URL
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error("API ERROR:", error.response);
+    return Promise.reject(error);
+  },
+);

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { activityService } from "../services/activityService";
 
 export const useActivities = (date) => {
   return useQuery({

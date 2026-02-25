@@ -16,11 +16,7 @@ const ActivitiesTable = ({ activities }) => {
     <div className="overflow-x-auto bg-white rounded-lg shadow">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
-          <tr
-            key={activity.id}
-            onClick={() => navigate(`/activities/${activity.id}`)}
-            className="hover:bg-gray-50 cursor-pointer"
-          >
+          <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               #
             </th>
@@ -47,7 +43,11 @@ const ActivitiesTable = ({ activities }) => {
 
         <tbody className="bg-white divide-y divide-gray-200">
           {activities.map((activity, idx) => (
-            <tr key={activity.id} className="hover:bg-gray-50">
+            <tr
+              key={activity.id}
+              onClick={() => navigate(`/activities/${activity.id}`)}
+              className="hover:bg-gray-50 cursor-pointer"
+            >
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {idx + 1}
               </td>

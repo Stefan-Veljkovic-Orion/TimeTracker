@@ -1,12 +1,16 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useActivity } from "../hooks/useActivity"; // hook za single activity
+import { useActivity } from "../hooks/useActivity";
+import { useUpdateActivity } from "../hooks/useUpdateActivity";
+import { useDeleteActivity } from "../hooks/useDeleteActivity";
 
 const ActivityEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const { data: activity, isLoading } = useActivity(id);
+  const updateMutation = useUpdateActivity();
+  const deleteMutation = useDeleteActivity();
 
   const [formData, setFormData] = useState({
     description: "",
@@ -17,7 +21,9 @@ const ActivityEdit = () => {
     if (activity) {
       setFormData({
         description: activity.description || "",
-        time_of_activity: activity.time_of_activity,
+        time_of_activity: activity.time_of_activity
+          ? activity.time_of_activity.slice(0, 16)
+          : "",
       });
     }
   }, [activity]);
@@ -30,18 +36,34 @@ const ActivityEdit = () => {
   };
 
   const handleUpdate = async () => {
-    await updateActivity(id, formData);
-    navigate("/activities");
+    try {
+      await updateMutation.mutateAsync({
+        id,
+        data: formData,
+      });
+
+      navigate("/activities");
+    } catch (err) {
+      console.error("Update failed", err);
+    }
   };
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this activity?")) {
-      await deleteActivity(id);
+    if (!window.confirm("Are you sure you want to delete this activity?"))
+      return;
+
+    try {
+      await deleteMutation.mutateAsync(id);
       navigate("/activities");
+    } catch (err) {
+      console.error("Delete failed", err);
     }
   };
 
   if (isLoading) return <div>Loading...</div>;
+
+  if (!activity)
+    return <div className="text-red-600 font-medium">Activity not found.</div>;
 
   return (
     <div className="max-w-xl mx-auto bg-white p-6 rounded shadow">
@@ -88,8 +110,9 @@ const ActivityEdit = () => {
           <button
             onClick={handleUpdate}
             className="px-4 py-2 bg-blue-600 text-white rounded"
+            disabled={updateMutation.isLoading}
           >
-            Save
+            {updateMutation.isLoading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
