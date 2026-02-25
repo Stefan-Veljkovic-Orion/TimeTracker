@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Activities from "./pages/Activities";
 import ActivityEdit from "./pages/ActivityEdit";
+import ActivityCreate from "./pages/ActivityCreate";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Activities />} />
           <Route path="/activities/:id" element={<ActivityEdit />} />
+          <Route path="/activities/create" element={<ActivityCreate />} />
         </Route>
       </Routes>
     </BrowserRouter>

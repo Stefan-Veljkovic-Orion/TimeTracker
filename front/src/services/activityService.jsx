@@ -55,4 +55,15 @@ export const activityService = {
   deleteActivity: async (id) => {
     return activityApi.delete(id);
   },
+
+  // CREATE
+  createActivity: async (data) => {
+    try {
+      const res = await activityApi.create(data);
+      return res;
+    } catch (err) {
+      console.error("Error creating activity:", err);
+      throw err;
+    }
+  },
 };

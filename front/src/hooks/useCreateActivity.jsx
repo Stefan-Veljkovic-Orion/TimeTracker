@@ -5,7 +5,7 @@ export const useCreateActivity = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: activityService.createActivity,
+    mutationFn: (data) => activityService.createActivity(data),
     onSuccess: () => {
       queryClient.invalidateQueries(["activities"]);
     },
