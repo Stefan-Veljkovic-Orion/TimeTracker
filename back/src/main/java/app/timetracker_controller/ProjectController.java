@@ -7,6 +7,7 @@ import app.timetracker_entity_implemantion.Project;
 import app.timetracker_mapper.ProjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/projects")
@@ -29,6 +30,21 @@ public class ProjectController {
         return projectMapper.toDto(saved);
     }
 
+    // GET ALL
+    @GetMapping
+    public List<ProjectDto> getAllProjects() {
+        return projectService.getAllProjects()
+                .stream()
+                .map(projectMapper::toDto)
+                .toList();
+    }
+
+
+    // GET BY ID
+    @GetMapping("/{id}")
+    public ProjectDto getProjectById(@PathVariable int id) {
+        return projectMapper.toDto(projectService.getProjectById(id));
+    }
 
     // UPDATE
     @PutMapping("/{id}")
