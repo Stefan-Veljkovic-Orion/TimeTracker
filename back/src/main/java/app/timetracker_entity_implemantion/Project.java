@@ -13,7 +13,7 @@ public class Project {
     private String projectName;
     private String description;
     private String managerEmail;
-    @OneToMany(mappedBy = "project",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "project")
     private List<Activity> activities;
 
     public Project(int id, String projectName, String description, String managerEmail, List<Activity> activities) {
