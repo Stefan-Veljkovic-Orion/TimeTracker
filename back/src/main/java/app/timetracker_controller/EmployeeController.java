@@ -7,6 +7,8 @@ import app.timetracker_mapper.EmployeeMapper;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -22,7 +24,23 @@ public class EmployeeController {
     @PostMapping
     public EmpolyeeDto createEmployee(@Valid @RequestBody EmpolyeeDto dto) {
         Employee employee = employeeMapper.toEntity(dto);
-        Employee saved = employeeService.saveEmployee(employee, dto.getDepartmentID());
+        Employee saved = employeeService.saveEmployee(employee,dto);
         return employeeMapper.toDto(saved);
+    }
+    @GetMapping
+    public List<EmpolyeeDto> getAllEmployees() {
+        return employeeService.getAllEmployees()
+                .stream()
+                .map(employeeMapper::toDto)
+                .toList();
+    }
+    @GetMapping("/{id}")
+    public EmpolyeeDto getEmployeeId(@PathVariable int id) {
+        return employeeMapper.toDto(employeeService.getEmployeeId(id));
+    }
+    @PutMapping("/{id}")
+    public EmpolyeeDto updateEmployee(@PathVariable Integer id, @Valid @RequestBody EmpolyeeDto dto) {
+        Employee updated = employeeService.updateEmployee(id, dto);
+        return employeeMapper.toDto(updated);
     }
 }
