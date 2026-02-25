@@ -45,10 +45,10 @@ public class ActivityService {
             }
 
             try {
-                Employee employee = employeeRepository.findById(dto.getEmployeeId())
-                        .orElseThrow(() -> new RuntimeException("Employee not found"));
-                Project project = projectRepository.findById(dto.getProjectId())
-                        .orElseThrow(() -> new RuntimeException("Project not found"));
+                Employee employee = dto.getEmployee();
+
+                Project project = dto.getProject();
+
 
                 Activity activity = new Activity();
                 activity.setEmployee(employee);
@@ -69,12 +69,10 @@ public class ActivityService {
 
     private String validate(ActivityDto dto) {
 
-        if (dto.getEmployeeId() == null) return "EmployeeId is mandatory";
-        if (dto.getProjectId() == null) return "ProjectId is mandatory";
+        if (dto.getEmployee() == null) return "EmployeeId is mandatory";
+        if (dto.getProject() == null) return "ProjectId is mandatory";
         if (dto.getDescription() == null || dto.getDescription().isBlank()) return "Description is mandatory";
         if (dto.getTime() == null) return "Time is mandatory";
-        if (!"Orion".equals(dto.getEmail())) return "Email must be Orion";
-
         return null;
     }
 
