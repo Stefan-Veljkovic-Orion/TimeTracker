@@ -3,6 +3,7 @@ package app.timetrack_service;
 import app.timetrack_repository.IActivityRepository;
 import app.timetrack_repository.IEmployeeRepository;
 import app.timetrack_repository.IProjectRepository;
+import app.timetracker_dto_implementation.ActivityCSVDto;
 import app.timetracker_dto_implementation.ActivityDto;
 import app.timetracker_dto_implementation.BulkActivityDto;
 import app.timetracker_dto_implementation.FailedActivityDto;
@@ -14,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +30,10 @@ public class ActivityService {
         this.employeeRepository = employeeRepository;
         this.projectRepository = projectRepository;
     }
-
+    public List<ActivityCSVDto> getAllActivity(){
+        List<Activity> lista = activityRepository.findAll();
+        return  lista.stream().map(a -> new ActivityCSVDto(a.getId(), a.getEmployee().getName(), a.getProject().getProjectName(),a.getDescription(),a.getTimeOfActivity())).toList();
+    }
     public BulkActivityDto bulkInsert(List<ActivityDto> requests) {
 
         List<Integer> savedIds = new ArrayList<>();
@@ -45,10 +48,10 @@ public class ActivityService {
             }
 
             try {
-                Employee employee = employeeRepository.findById(dto.getEmployeeId())
-                        .orElseThrow(() -> new RuntimeException("Employee not found"));
-                Project project = projectRepository.findById(dto.getProjectId())
-                        .orElseThrow(() -> new RuntimeException("Project not found"));
+                Employee employee = dto.getEmployee();
+
+                Project project = dto.getProject();
+
 
                 Activity activity = new Activity();
                 activity.setEmployee(employee);
@@ -69,13 +72,13 @@ public class ActivityService {
 
     @Transactional
     public Activity create(ActivityDto dto) {
-        Project project = projectRepository.findById(dto.getProjectId())
+        Project project = projectRepository.findById(dto.getProject().getId())
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Project not found: " + dto.getProjectId()));
+                        HttpStatus.NOT_FOUND, "Project not found: " + dto.getProject().getId()));
 
-        Employee employee = employeeRepository.findById(dto.getEmployeeId())
+        Employee employee = employeeRepository.findById(dto.getEmployee().getId())
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Employee not found: " + dto.getEmployeeId()));
+                        HttpStatus.NOT_FOUND, "Employee not found: " + dto.getEmployee().getId()));
 
         Activity entity = new Activity();
         entity.setProject(project);
@@ -98,11 +101,10 @@ public class ActivityService {
 
 private String validate(ActivityDto dto) {
 
-        if (dto.getEmployeeId() == null) return "EmployeeId is mandatory";
-        if (dto.getProjectId() == null) return "ProjectId is mandatory";
+        if (dto.getEmployee() == null) return "EmployeeId is mandatory";
+        if (dto.getProject() == null) return "ProjectId is mandatory";
         if (dto.getDescription() == null || dto.getDescription().isBlank()) return "Description is mandatory";
         if (dto.getTime() == null) return "Time is mandatory";
-
         return null;
     }
 
