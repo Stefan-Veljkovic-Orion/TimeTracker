@@ -49,6 +49,10 @@ const Activities = () => {
           Loading error
         </div>
       )}
+      <div className="hidden print:block mb-6">
+        <h2 className="text-xl font-bold">Employee Activity Report</h2>
+        <p className="text-sm text-gray-600">Date: {selectedDate}</p>
+      </div>
       {!isLoading && !error && (
         <ActivitiesTable activities={activities || []} />
       )}
