@@ -6,6 +6,8 @@ import app.timetracker_entity_implemantion.Department;
 import app.timetracker_entity_implemantion.Employee;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmployeeService {
 
@@ -24,5 +26,13 @@ public class EmployeeService {
 
         employee.setDepartment(dep);
         return employeeRepository.save(employee);
+    }
+
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
+    }
+    public Employee getEmployeeId(int id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
     }
 }
