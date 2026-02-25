@@ -9,7 +9,13 @@ def create_employee():
     name = input("Enter employee name: ")
     email = input("Enter employee email: ")
     date_of_employment = input("Enter date of employment (e.g. YYYY-MM-DD): ") # DODATO POLJE
-    department = int(input("Enter department: "))
+    # BEZBEDAN UNOS ZA DEPARTMENT (Sprečava pucanje programa)
+    department_input = input("Enter department ID (number): ")
+    if not department_input.isdigit():
+        print("Validation error: Department must be a valid number (ID).")
+        return # Prekida ako korisnik nije ukucao broj
+    
+    department = int(department_input)
     
     # 1. Osnovna validacija (ime i domen)
     if not validate_employee(name, email):
