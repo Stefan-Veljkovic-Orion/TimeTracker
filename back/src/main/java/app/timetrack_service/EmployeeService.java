@@ -35,10 +35,7 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public List<EmployeeCSVDto> getAllEmployee() {
-        List<Employee> lista = employeeRepository.findAll();
-        return lista.stream().map(e -> new EmployeeCSVDto(e.getId(), e.getName(), e.getEmail(), e.getDateOfEmployment(), e.getDepartment().getDepartmentName())).toList();
-    }
+
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
@@ -65,5 +62,10 @@ public class EmployeeService {
         employee.setDepartment(dep);
 
         return employeeRepository.save(employee);
+
+    }
+    public List<EmployeeCSVDto> getAllEmployee(){
+        List<Employee> lista = employeeRepository.findAll();
+        return  lista.stream().map(e -> new EmployeeCSVDto(e.getId(),e.getName(),e.getEmail(),e.getDateOfEmployment(),e.getDepartment().getDepartmentName())).toList();
     }
 }
