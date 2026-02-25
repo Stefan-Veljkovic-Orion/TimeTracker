@@ -19,6 +19,14 @@ def track_new_activities():
     # Skup (Set) u koji smestamo jedinstvene identifikatore vidjenih aktivnosti
     seen_activities = set()
 
+    # Učitavamo sve postojeće aktivnosti pre petlje da ih ne bismo prijavili kao nove
+    initial_activities = load_data(ACTIVITIES_FILE)
+    for act in initial_activities:
+        unique_id = f"{act.get('employee')}_{act.get('time')}_{act.get('project')}"
+        seen_activities.add(unique_id)
+
+    print(f"[Info] Pronadjeno {len(seen_activities)} postojecih aktivnosti. Cekanje novih\n")
+
     try:
         # Glavna beskonacna petlja (Polling)
         while True:
