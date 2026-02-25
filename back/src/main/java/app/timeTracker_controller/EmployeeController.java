@@ -45,7 +45,6 @@ public class EmployeeController {
         return employeeMapper.toDto(updated);
     }
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmployee(@PathVariable int id) {
         employeeService.deleteEmployee(id);
     }
