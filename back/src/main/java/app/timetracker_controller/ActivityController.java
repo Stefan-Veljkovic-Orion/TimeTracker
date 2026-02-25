@@ -9,10 +9,7 @@ import app.timetrack_service.ActivityService;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
@@ -49,6 +46,21 @@ public class ActivityController {
                         .buildAndExpand(saved.getId())
                         .toUri())
                 .body(ActivityResponseDto.from(saved));
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<ActivityResponseDto>> getEmployeeActivities(
+            @PathVariable Integer employeeId,
+            @RequestParam(required = false) String fromDate,
+            @RequestParam(required = false) String toDate) {
+
+        List<Activity> activities = activityService.findActivitiesForEmployee(employeeId, fromDate, toDate);
+
+        List<ActivityResponseDto> response = activities.stream()
+                .map(activityMapper::toResponse)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
 }
