@@ -12,6 +12,8 @@ import app.timetracker_dto_implementation.response.ActivityResponseDto;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_entity_implemantion.Project;
+import app.timetracker_mapper.EmployeeMapper;
+import app.timetracker_mapper.ProjectMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -56,9 +58,9 @@ public class ActivityService {
             }
 
             try {
-                Employee employee = dto.getEmployee();
+                Employee employee = new EmployeeMapper().toEntity(dto.getEmployee());
 
-                Project project = dto.getProject();
+                Project project = new ProjectMapper().toEntity(dto.getProject());
 
 
                 Activity activity = new Activity();

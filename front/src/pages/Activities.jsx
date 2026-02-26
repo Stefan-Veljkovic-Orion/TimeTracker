@@ -26,9 +26,10 @@ const Activities = () => {
   const filteredActivities = activities.filter((activity) => {
     if (!selectedDate) return true;
 
-    const activityDate = activity.time_of_activity?.split("T")[0];
+    const activityDate = activity.time?.split("T")[0];
     return activityDate === selectedDate;
   });
+  console.log(activities);
 
   return (
     <div>

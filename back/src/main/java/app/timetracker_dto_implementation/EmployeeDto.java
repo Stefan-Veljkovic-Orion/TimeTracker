@@ -2,6 +2,7 @@ package app.timetracker_dto_implementation;
 
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Department;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -27,9 +28,10 @@ public class EmployeeDto {
 
     private LocalDateTime dateOfEmployment;
 
-    @NotNull(message = "Department required")
+    @JsonIgnore
     private Department department;
 
+    @JsonIgnore
     private List<Activity> activities;
 
     public EmployeeDto() {

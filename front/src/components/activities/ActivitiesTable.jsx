@@ -83,7 +83,7 @@ const ActivitiesTable = ({ activities, onDelete }) => {
                 </td>
 
                 <td className="px-6 py-4 text-sm">
-                  {activity.project?.name || "—"}
+                  {activity.project?.projectName || "—"}
                 </td>
 
                 <td className="px-6 py-4 text-sm">
@@ -91,10 +91,12 @@ const ActivitiesTable = ({ activities, onDelete }) => {
                 </td>
 
                 <td className="px-6 py-4 text-sm">
-                  {new Date(activity.time_of_activity).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {activity.time
+                    ? new Date(activity.time).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
+                    : "—"}
                 </td>
 
                 <td className="px-6 py-4 text-sm">

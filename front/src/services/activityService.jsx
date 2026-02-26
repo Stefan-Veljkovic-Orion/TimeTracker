@@ -1,4 +1,5 @@
 import { activityApi } from "../api/activityApi";
+import { apiClient } from "../api/client";
 
 /*export const activityService = async (date) => {
   const res = await fetch(`/api/activities?date=${date}`);

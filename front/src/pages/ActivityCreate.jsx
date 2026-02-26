@@ -54,12 +54,25 @@ const ActivityCreate = () => {
       return;
     }
 
+    const payload = {
+      employee: { id: Number(formData.employee_id) },
+      project: { id: Number(formData.project_id) },
+      employee_id: Number(formData.employee_id),
+      project_id: Number(formData.project_id),
+      description: formData.description,
+      time: formData.time_of_activity + ":00",
+    };
+
+    console.log("PAYLOAD:", payload);
+
     try {
-      await createActivity.mutateAsync(formData);
-      navigate("/activities");
-    } catch (err) {
-      console.error(err);
-      setErrorMessage("Failed to create activity. Please try again.");
+      await createActivity.mutateAsync(payload);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(
+        error.response?.data?.message || "Failed to create activity",
+      );
     }
   };
 
@@ -91,7 +104,6 @@ const ActivityCreate = () => {
             ))}
           </select>
         </div>
-
         <div>
           <label className="block mb-1 font-medium">Project</label>
           <select
@@ -104,12 +116,11 @@ const ActivityCreate = () => {
             <option value="">Select project</option>
             {projects.map((proj) => (
               <option key={proj.id} value={proj.id}>
-                {proj.name} (ID: {proj.id})
+                {proj.projectName}
               </option>
             ))}
           </select>
         </div>
-
         <div>
           <label className="block mb-1 font-medium">Description</label>
           <input
@@ -121,7 +132,6 @@ const ActivityCreate = () => {
             required
           />
         </div>
-
         <div>
           <label className="block mb-1 font-medium">Time of Activity</label>
           <input
@@ -133,7 +143,6 @@ const ActivityCreate = () => {
             required
           />
         </div>
-
         <div className="flex justify-between items-center mt-4">
           <button
             type="button"
