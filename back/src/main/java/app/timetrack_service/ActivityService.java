@@ -9,6 +9,7 @@ import app.timetracker_dto_implementation.bulk.FailedActivityDto;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_entity_implemantion.Project;
+import app.timetracker_mapper.ActivityMapper;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +34,16 @@ public class ActivityService {
     private final IActivityRepository activityRepository;
     private final IEmployeeRepository employeeRepository;
     private final IProjectRepository projectRepository;
+    private final ActivityMapper activityMapper;
 
-    public ActivityService(IActivityRepository activityRepository, IEmployeeRepository employeeRepository,IProjectRepository projectRepository) {
+    public ActivityService(IActivityRepository activityRepository,
+                           IEmployeeRepository employeeRepository,
+                           IProjectRepository projectRepository,
+                           ActivityMapper activityMapper) {
         this.activityRepository = activityRepository;
         this.employeeRepository = employeeRepository;
         this.projectRepository = projectRepository;
+        this.activityMapper = activityMapper;
     }
 
 
@@ -45,7 +51,7 @@ public class ActivityService {
         List<Activity> lista = activityRepository.findAll();
         return  lista.stream().map(a -> new ActivityCSVDto(a.getId(), a.getEmployee().getName(), a.getProject().getProjectName(),a.getDescription(),a.getTimeOfActivity())).toList();
     }
-    
+
     public BulkActivityDto bulkInsert(List<ActivityDto> requests) {
 
         List<Integer> savedIds = new ArrayList<>();
@@ -193,16 +199,17 @@ public class ActivityService {
         if (!"orion".contains(dto.getEmployee().getEmail())) return "Email must be Orion";
         return null;
     }
-        public List<ActivityResponseDto> getActivities () {
-            List<Activity> activities = activityRepository.findAll();
 
-            return activities.stream()
-                    .map(ActivityResponseDto::from)
-                    .collect(Collectors.toList());
-        }
+    public List<ActivityResponseDto> getActivities () {
+        List<Activity> activities = activityRepository.findAll();
 
+        return activities.stream()
+                .map(ActivityResponseDto::from)
+                .collect(Collectors.toList());
+    }
 
-
-
-    
+    public List<ActivityResponseDto> getActivitiesInLastFiveSeconds() {
+        return activityRepository.findAllInLastFiveSeconds(LocalDateTime.now().minusSeconds(5))
+                .stream().map(activityMapper::toResponse).toList();
+    }
 }
