@@ -72,13 +72,7 @@ public class ActivityDto {
     public void setTime(LocalDateTime time) {
         this.time = time;
     }
-}
 
-    public Integer getEmployeeId() { return employeeId; }
 
-    public void setEmployeeId(Integer employeeId) { this.employeeId = employeeId; }
-
-    public Integer getProjectId() { return projectId; }
-
-    public void setProjectId(Integer projectId) { this.projectId = projectId; }
+    
 }
