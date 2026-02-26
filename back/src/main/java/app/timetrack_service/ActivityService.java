@@ -22,6 +22,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -143,6 +144,33 @@ public class ActivityService {
                 })
                 .sorted(Comparator.comparing(Activity::getTimeOfActivity).reversed())
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Activity update(Integer id, ActivityDto dto) {
+        Optional<Activity> optionalActivity = activityRepository.findById(id);
+        if (optionalActivity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found with id: " + id);
+        }
+
+        Activity activity = optionalActivity.get();
+
+        Employee employee = employeeRepository.findById(dto.getEmployeeId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found: " + dto.getEmployee()));
+
+        Project project = projectRepository.findById(dto.getProjectId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found: " + dto.getProject()));
+
+        activity.setEmployee(employee);
+        activity.setProject(project);
+        activity.setDescription(dto.getDescription());
+        activity.setTimeOfActivity(dto.getTime());
+
+        try {
+            return activityRepository.save(activity);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Data conflict: " + e.getMostSpecificCause().getMessage(), e);
+        }
     }
 
     private String validate(ActivityDto dto) {
