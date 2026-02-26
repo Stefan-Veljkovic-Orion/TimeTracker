@@ -5,7 +5,8 @@ export const useDeleteActivity = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: activityService.deleteActivity,
+    mutationFn: (id) => activityService.deleteActivity(id),
+
     onSuccess: () => {
       queryClient.invalidateQueries(["activities"]);
     },

@@ -72,5 +72,5 @@ public class ActivityDto {
     public void setTime(LocalDateTime time) {
         this.time = time;
     }
-}
 
+}
