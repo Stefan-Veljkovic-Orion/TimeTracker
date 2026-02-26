@@ -1,4 +1,4 @@
-package app.timetracker_dto_implementation;
+package app.timetracker_dto_implementation.bulk;
 
 import java.util.List;
 
