@@ -9,6 +9,8 @@ import app.timetracker_dto_implementation.bulk.FailedActivityDto;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_entity_implemantion.Project;
+import app.timetracker_mapper.EmployeeMapper;
+import app.timetracker_mapper.ProjectMapper;
 import app.timetracker_mapper.ActivityMapper;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -66,6 +68,11 @@ public class ActivityService {
             }
 
             try {
+                Employee employee = new EmployeeMapper().toEntity(dto.getEmployee());
+
+                Project project = new ProjectMapper().toEntity(dto.getProject());
+
+
                 Employee employee = dto.getEmployee();
                 Project project = dto.getProject();
                 Activity activity = new Activity();
