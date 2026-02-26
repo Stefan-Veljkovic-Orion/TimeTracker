@@ -8,6 +8,7 @@ import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_mapper.EmployeeMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
@@ -68,5 +69,9 @@ public class EmployeeController {
     public EmpolyeeDto updateEmployee(@PathVariable Integer id, @Valid @RequestBody EmpolyeeDto dto) {
         Employee updated = employeeService.updateEmployee(id, dto);
         return employeeMapper.toDto(updated);
+    }
+    @DeleteMapping("/{id}")
+    public void deleteEmployee(@PathVariable int id) {
+        employeeService.deleteEmployee(id);
     }
 }

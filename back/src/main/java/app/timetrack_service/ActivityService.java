@@ -12,7 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,7 +110,47 @@ public class ActivityService {
         }
     }
 
-private String validate(ActivityDto dto) {
+
+    public List<Activity> findActivitiesForEmployee(Integer employeeId, String fromDate, String toDate) {
+        if (employeeId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "employeeId is required");
+        }
+        LocalDateTime from;
+        LocalDateTime to;
+
+        if (fromDate != null && !fromDate.isBlank()) {
+            from = LocalDate.parse(fromDate).atTime(LocalTime.MIN);
+        } else {
+            from = null;
+        }
+        if (toDate != null && !toDate.isBlank()) {
+            to = LocalDate.parse(toDate).atTime(LocalTime.MAX);
+        } else {
+            to = null;
+        }
+
+        List<Activity> activities;
+
+        try {
+            activities = activityRepository.findByEmployeeId(employeeId,from,to);
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to load activities", ex);
+        }
+
+        return activities.stream()
+                .filter(a -> {
+                    LocalDateTime t = a.getTimeOfActivity();
+                    if (t == null) return false;
+                    boolean afterFrom = (from == null) || !t.isBefore(from);
+                    boolean beforeTo = (to == null) || !t.isAfter(to);
+                    return afterFrom && beforeTo;
+                })
+                .sorted(Comparator.comparing(Activity::getTimeOfActivity).reversed())
+                .collect(Collectors.toList());
+    }
+
+
+    private String validate(ActivityDto dto) {
 
         if (dto.getEmployee() == null) return "EmployeeId is mandatory";
         if (dto.getProject() == null) return "ProjectId is mandatory";
