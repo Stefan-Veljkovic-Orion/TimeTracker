@@ -1,10 +1,10 @@
 package app.timetracker_controller;
 
+import app.timetracker_dto_implementation.bulk.BulkActivityDto;
 import app.timetracker_dto_implementation.csv.ActivityCSVDto;
 import app.timetracker_dto_implementation.ActivityDto;
-import app.timetracker_dto_implementation.response.ActivityResponseDto;
-import app.timetracker_dto_implementation.bulk.BulkActivityDto;
 import app.timetrack_service.ActivityService;
+import app.timetracker_dto_implementation.response.ActivityResponseDto;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_mapper.ActivityMapper;
 import jakarta.servlet.http.HttpServletResponse;
@@ -99,12 +99,23 @@ public class ActivityController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ActivityResponseDto> update(
+            @PathVariable Integer id,
+            @Valid @RequestBody ActivityDto dto) {
+        Activity updated = activityService.update(id, dto);
+        return ResponseEntity.ok(ActivityResponseDto.from(updated));
+    }
+
     @GetMapping("/from-last-five-seconds")
     public ResponseEntity<List<ActivityResponseDto>> getActivitiesInLastFiveSeconds(){
         return ResponseEntity.ok(activityService.getActivitiesInLastFiveSeconds());
     }
 
-
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        activityService.delete(id);
+        return ResponseEntity.noContent().build();  // 204 No Content
+    }
 }
 
