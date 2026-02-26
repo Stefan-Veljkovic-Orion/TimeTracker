@@ -3,10 +3,7 @@ package app.timetrack_service;
 import app.timetrack_repository.IActivityRepository;
 import app.timetrack_repository.IEmployeeRepository;
 import app.timetrack_repository.IProjectRepository;
-import app.timetracker_dto_implementation.ActivityCSVDto;
-import app.timetracker_dto_implementation.ActivityDto;
-import app.timetracker_dto_implementation.BulkActivityDto;
-import app.timetracker_dto_implementation.FailedActivityDto;
+import app.timetracker_dto_implementation.*;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_entity_implemantion.Project;
@@ -17,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ActivityService {
@@ -68,6 +66,14 @@ public class ActivityService {
         }
 
         return new BulkActivityDto(savedIds, failedRecords);
+    }
+
+    public List<ActivityResponseDto> getActivities() {
+        List<Activity> activities = activityRepository.findAll();
+
+        return activities.stream()
+                .map(ActivityResponseDto::from)
+                .collect(Collectors.toList());
     }
 
     @Transactional
