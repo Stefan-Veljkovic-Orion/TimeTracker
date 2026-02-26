@@ -1,9 +1,9 @@
 package app.timetracker_mapper;
 
 import app.timetracker_dto_implementation.ActivityDto;
-import app.timetracker_dto_implementation.ActivityResponseDto;
-import app.timetracker_dto_implementation.EmployeeResponseDtoSimple;
-import app.timetracker_dto_implementation.ProjectResponseDto;
+import app.timetracker_dto_implementation.response.ActivityResponseDto;
+import app.timetracker_dto_implementation.response.EmployeeResponseDtoSimple;
+import app.timetracker_dto_implementation.response.ProjectResponseDto;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_entity_implemantion.Project;

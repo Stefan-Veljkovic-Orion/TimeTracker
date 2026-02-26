@@ -1,27 +1,35 @@
-package app.timetracker_dto_implementation;
+package app.timetracker_dto_implementation.response;
 
 import java.time.LocalDateTime;
 
-public class EmployeeCSVDto {
-    private Integer id;
+public class EmployeeResponseDto {
+
+    private int id;
     private String name;
     private String email;
     private LocalDateTime dateOfEmployment;
-    private String departmentName;
 
-    public EmployeeCSVDto(Integer id, String name, String email, LocalDateTime dateOfEmployment, String departmentName) {
+    // Full department info (not just ID)
+    private DepartmentResponseDto department;
+
+    public EmployeeResponseDto() {
+    }
+
+    public EmployeeResponseDto(int id, String name, String email,
+                               LocalDateTime dateOfEmployment,
+                               DepartmentResponseDto department) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.dateOfEmployment = dateOfEmployment;
-        this.departmentName = departmentName;
+        this.department = department;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -49,11 +57,11 @@ public class EmployeeCSVDto {
         this.dateOfEmployment = dateOfEmployment;
     }
 
-    public String getDepartmentName() {
-        return departmentName;
+    public DepartmentResponseDto getDepartment() {
+        return department;
     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+    public void setDepartment(DepartmentResponseDto department) {
+        this.department = department;
     }
 }

@@ -55,4 +55,11 @@ public class ProjectController {
         return projectMapper.toDto(updated);
     }
 
+    // DELETE
+    @DeleteMapping("/{id}")
+    public void deleteProject(@PathVariable int id) {
+        projectService.deleteProject(id);
+    }
+
+
 }

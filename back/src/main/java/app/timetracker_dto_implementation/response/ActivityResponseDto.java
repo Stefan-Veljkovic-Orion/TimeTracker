@@ -1,4 +1,4 @@
-package app.timetracker_dto_implementation;
+package app.timetracker_dto_implementation.response;
 
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
