@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -78,6 +79,101 @@ public class ActivityService {
         return new BulkActivityDto(savedIds, failedRecords);
     }
 
+    @Transactional
+    public Activity create(ActivityDto dto) {
+        Project project = projectRepository.findById(dto.getProject().getId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Project not found: " + dto.getProject().getId()));
+
+        Employee employee = employeeRepository.findById(dto.getEmployee().getId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Employee not found: " + dto.getEmployee().getId()));
+
+        Activity entity = new Activity();
+        entity.setProject(project);
+        entity.setEmployee(employee);
+        entity.setDescription(dto.getDescription());
+        entity.setTimeOfActivity(dto.getTime());
+
+        try {
+            return activityRepository.save(entity);
+        } catch (DataIntegrityViolationException e) {
+            // Unique/FK constraint errors -> 409 Conflict
+            e.getMostSpecificCause();
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Data conflict: " + e.getMostSpecificCause().getMessage(),
+                    e
+            );
+        }
+    }
+
+
+    public List<Activity> findActivitiesForEmployee(Integer employeeId, String fromDate, String toDate) {
+        if (employeeId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "employeeId is required");
+        }
+        LocalDateTime from;
+        LocalDateTime to;
+
+        if (fromDate != null && !fromDate.isBlank()) {
+            from = LocalDate.parse(fromDate).atTime(LocalTime.MIN);
+        } else {
+            from = null;
+        }
+        if (toDate != null && !toDate.isBlank()) {
+            to = LocalDate.parse(toDate).atTime(LocalTime.MAX);
+        } else {
+            to = null;
+        }
+
+        List<Activity> activities;
+
+        try {
+            activities = activityRepository.findByEmployeeId(employeeId,from,to);
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to load activities", ex);
+        }
+
+        return activities.stream()
+                .filter(a -> {
+                    LocalDateTime t = a.getTimeOfActivity();
+                    if (t == null) return false;
+                    boolean afterFrom = (from == null) || !t.isBefore(from);
+                    boolean beforeTo = (to == null) || !t.isAfter(to);
+                    return afterFrom && beforeTo;
+                })
+                .sorted(Comparator.comparing(Activity::getTimeOfActivity).reversed())
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Activity update(Integer id, ActivityDto dto) {
+        Optional<Activity> optionalActivity = activityRepository.findById(id);
+        if (optionalActivity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found with id: " + id);
+        }
+
+        Activity activity = optionalActivity.get();
+
+        Employee employee = employeeRepository.findById(dto.getEmployeeId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found: " + dto.getEmployee()));
+
+        Project project = projectRepository.findById(dto.getProjectId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found: " + dto.getProject()));
+
+        activity.setEmployee(employee);
+        activity.setProject(project);
+        activity.setDescription(dto.getDescription());
+        activity.setTimeOfActivity(dto.getTime());
+
+        try {
+            return activityRepository.save(activity);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Data conflict: " + e.getMostSpecificCause().getMessage(), e);
+        }
+    }
+
     private String validate(ActivityDto dto) {
 
         if (dto.getEmployee() == null) return "Employee is mandatory";
@@ -95,72 +191,8 @@ public class ActivityService {
                     .collect(Collectors.toList());
         }
 
-        @Transactional
-        public Activity create (ActivityDto dto){
-            Project project = projectRepository.findById(dto.getProject().getId())
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "Project not found: " + dto.getProject().getId()));
-
-            Employee employee = employeeRepository.findById(dto.getEmployee().getId())
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "Employee not found: " + dto.getEmployee().getId()));
-
-            Activity entity = new Activity();
-            entity.setProject(project);
-            entity.setEmployee(employee);
-            entity.setDescription(dto.getDescription());
-            entity.setTimeOfActivity(dto.getTime());
-
-            try {
-                return activityRepository.save(entity);
-            } catch (DataIntegrityViolationException e) {
-                // Unique/FK constraint errors -> 409 Conflict
-                e.getMostSpecificCause();
-                throw new ResponseStatusException(
-                        HttpStatus.CONFLICT,
-                        "Data conflict: " + e.getMostSpecificCause().getMessage(),
-                        e
-                );
-            }
-        }
 
 
-        public List<Activity> findActivitiesForEmployee (Integer employeeId, String fromDate, String toDate){
-            if (employeeId == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "employeeId is required");
-            }
-            LocalDateTime from;
-            LocalDateTime to;
 
-            if (fromDate != null && !fromDate.isBlank()) {
-                from = LocalDate.parse(fromDate).atTime(LocalTime.MIN);
-            } else {
-                from = null;
-            }
-            if (toDate != null && !toDate.isBlank()) {
-                to = LocalDate.parse(toDate).atTime(LocalTime.MAX);
-            } else {
-                to = null;
-            }
-
-            List<Activity> activities;
-
-            try {
-                activities = activityRepository.findByEmployeeId(employeeId, from, to);
-            } catch (Exception ex) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to load activities", ex);
-            }
-
-            return activities.stream()
-                    .filter(a -> {
-                        LocalDateTime t = a.getTimeOfActivity();
-                        if (t == null) return false;
-                        boolean afterFrom = (from == null) || !t.isBefore(from);
-                        boolean beforeTo = (to == null) || !t.isAfter(to);
-                        return afterFrom && beforeTo;
-                    })
-                    .sorted(Comparator.comparing(Activity::getTimeOfActivity).reversed())
-                    .collect(Collectors.toList());
-        }
     
 }

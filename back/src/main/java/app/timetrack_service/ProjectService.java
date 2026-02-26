@@ -8,6 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import org.springframework.web.server.ResponseStatusException;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 
 @Service
@@ -96,4 +101,20 @@ public class ProjectService {
             projectRepository.delete(project);
         }
     
+    public void exportProjectsToCsv(Writer writer) throws IOException {
+
+        List<Project> projects = projectRepository.findAll();
+
+        try (ICsvBeanWriter csvWriter =
+                     new CsvBeanWriter(writer, CsvPreference.STANDARD_PREFERENCE)) {
+
+            String[] header = {"id", "projectName", "description", "managerEmail"};
+            csvWriter.writeHeader(header);
+
+            for (Project project : projects) {
+                csvWriter.write(project, header);
+            }
+        }
+    }
+
 }
