@@ -20,7 +20,7 @@ def sync_employees():
     
     try:
         # 2. Povlačimo radnike sa baze
-        response = requests.get("http://localhost:8080/employees")
+        response = requests.get("http://localhost:8080/activities/from-last-five-seconds")
         
         if response.status_code == 200:
             db_employees = response.json()

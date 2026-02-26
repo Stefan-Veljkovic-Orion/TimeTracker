@@ -39,5 +39,11 @@
     "email": "andja@orion.com",
     "date_of_employment": "2024-05-22",
     "department": 2
+  },
+  {
+    "name": null,
+    "email": null,
+    "date_of_employment": "None",
+    "department": null
   }
 ]

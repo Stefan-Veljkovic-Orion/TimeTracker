@@ -34,7 +34,7 @@ def track_new_activities():
         while True:
            
             try:
-                response = requests.get("http://localhost:8080/activities")
+                response = requests.get("http://localhost:8080/activities/from-last-five-seconds")
                 activities = response.json()
             except Exception as e:
                 print(f"Greška pri konekciji sa API-jem: {e}")

@@ -32,7 +32,7 @@ def store_activities_to_db():
         print("Nema novih lokalnih aktivnosti za slanje na backend.")
         return
         
-    api_url = "http://localhost:8080/activities/bulk-insert"
+    api_url = "http://localhost:8080/activities/bulk-insert" 
     
     formatted_activities =[]
     
