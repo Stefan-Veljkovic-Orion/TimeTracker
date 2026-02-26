@@ -5,8 +5,14 @@ import app.timetrack_service.ProjectService;
 import app.timetracker_dto_implementation.ProjectDto;
 import app.timetracker_entity_implemantion.Project;
 import app.timetracker_mapper.ProjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
+
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -61,5 +67,21 @@ public class ProjectController {
         projectService.deleteProject(id);
     }
 
+    //EXPORT CSV
+    @GetMapping(value = "/export-csv", produces = "text/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=project.csv");
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+        String[] header = {"ID", "Project Name", "Description", "Manager Email"};
+        String[] fieldMapping = {"id", "projectName", "description", "managerEmail"};
+        csvWriter.writeHeader(header);
+        for (Project e : projectService.getAllProjects()) {
+            csvWriter.write(e, fieldMapping);
+        }
+
+        csvWriter.close();
+    }
 
 }
