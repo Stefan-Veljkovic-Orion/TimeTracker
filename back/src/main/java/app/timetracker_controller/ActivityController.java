@@ -96,6 +96,14 @@ public class ActivityController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ActivityResponseDto> update(
+            @PathVariable Integer id,
+            @Valid @RequestBody ActivityDto dto) {
+        Activity updated = activityService.update(id, dto);
+        return ResponseEntity.ok(ActivityResponseDto.from(updated));
+    }
+
 
 }
 
