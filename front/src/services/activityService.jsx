@@ -45,4 +45,8 @@ export const activityService = {
   createActivity: async (data) => {
     return await activityApi.create(data);
   },
+  getAll: async () => {
+    const res = await apiClient.get("/activities");
+    return res.data;
+  },
 };

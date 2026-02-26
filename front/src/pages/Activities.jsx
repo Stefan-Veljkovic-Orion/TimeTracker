@@ -17,11 +17,18 @@ const getTodayDate = () => {
 const Activities = () => {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(getTodayDate());
-  const { data: activities, isLoading, error } = useActivities(selectedDate);
+  const { data: activities = [], isLoading, error } = useActivities();
 
   const handlePrint = () => {
     window.print();
   };
+
+  const filteredActivities = activities.filter((activity) => {
+    if (!selectedDate) return true;
+
+    const activityDate = activity.time_of_activity?.split("T")[0];
+    return activityDate === selectedDate;
+  });
 
   return (
     <div>
@@ -59,7 +66,7 @@ const Activities = () => {
       )}
 
       {!isLoading && !error && (
-        <ActivitiesTable activities={activities || []} />
+        <ActivitiesTable activities={filteredActivities} />
       )}
 
       {/* Aktivnost report za print */}

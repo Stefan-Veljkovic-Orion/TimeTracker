@@ -17,7 +17,7 @@ export const activityApi = {
 
   // POST /activities - primer
   create: async (data) => {
-    const response = await apiClient.post("/activities", data);
+    const response = await apiClient.post("/activities/create", data);
     return response.data;
   },
 
