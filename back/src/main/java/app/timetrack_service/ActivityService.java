@@ -3,30 +3,31 @@ package app.timetrack_service;
 import app.timetrack_repository.IActivityRepository;
 import app.timetrack_repository.IEmployeeRepository;
 import app.timetrack_repository.IProjectRepository;
-import app.timetracker_dto_implementation.*;
-import app.timetracker_dto_implementation.csv.ActivityCSVDto;
 import app.timetracker_dto_implementation.ActivityDto;
 import app.timetracker_dto_implementation.bulk.BulkActivityDto;
 import app.timetracker_dto_implementation.bulk.FailedActivityDto;
-import app.timetracker_dto_implementation.response.ActivityResponseDto;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_entity_implemantion.Project;
 import app.timetracker_mapper.EmployeeMapper;
 import app.timetracker_mapper.ProjectMapper;
+import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.List;
+import app.timetracker_dto_implementation.*;
+import app.timetracker_dto_implementation.csv.ActivityCSVDto;
+import app.timetracker_dto_implementation.response.ActivityResponseDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 @Service
 public class ActivityService {
@@ -40,10 +41,13 @@ public class ActivityService {
         this.employeeRepository = employeeRepository;
         this.projectRepository = projectRepository;
     }
+
+
     public List<ActivityCSVDto> getAllActivity(){
         List<Activity> lista = activityRepository.findAll();
         return  lista.stream().map(a -> new ActivityCSVDto(a.getId(), a.getEmployee().getName(), a.getProject().getProjectName(),a.getDescription(),a.getTimeOfActivity())).toList();
     }
+    
     public BulkActivityDto bulkInsert(List<ActivityDto> requests) {
 
         List<Integer> savedIds = new ArrayList<>();
@@ -63,6 +67,8 @@ public class ActivityService {
                 Project project = new ProjectMapper().toEntity(dto.getProject());
 
 
+                Employee employee = dto.getEmployee();
+                Project project = dto.getProject();
                 Activity activity = new Activity();
                 activity.setEmployee(employee);
                 activity.setProject(project);
@@ -78,14 +84,6 @@ public class ActivityService {
         }
 
         return new BulkActivityDto(savedIds, failedRecords);
-    }
-
-    public List<ActivityResponseDto> getActivities() {
-        List<Activity> activities = activityRepository.findAll();
-
-        return activities.stream()
-                .map(ActivityResponseDto::from)
-                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -156,13 +154,62 @@ public class ActivityService {
                 .collect(Collectors.toList());
     }
 
-    private String validate(ActivityDto dto) {
+    @Transactional
+    public Activity update(Integer id, ActivityDto dto) {
+        Optional<Activity> optionalActivity = activityRepository.findById(id);
+        if (optionalActivity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found with id: " + id);
+        }
 
-        if (dto.getEmployee() == null) return "EmployeeId is mandatory";
-        if (dto.getProject() == null) return "ProjectId is mandatory";
-        if (dto.getDescription() == null || dto.getDescription().isBlank()) return "Description is mandatory";
-        if (dto.getTime() == null) return "Time is mandatory";
-        return null;
+        Activity activity = optionalActivity.get();
+
+        Employee employee = employeeRepository.findById(dto.getEmployeeId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found: " + dto.getEmployee()));
+
+        Project project = projectRepository.findById(dto.getProjectId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found: " + dto.getProject()));
+
+        activity.setEmployee(employee);
+        activity.setProject(project);
+        activity.setDescription(dto.getDescription());
+        activity.setTimeOfActivity(dto.getTime());
+
+        try {
+            return activityRepository.save(activity);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Data conflict: " + e.getMostSpecificCause().getMessage(), e);
+        }
     }
 
+    @Transactional
+    public void delete(Integer id) {
+        Optional<Activity> optionalActivity = activityRepository.findById(id);
+        if (optionalActivity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found with id: " + id);
+        }
+
+        activityRepository.deleteById(id);
+    }
+
+    private String validate(ActivityDto dto) {
+
+        if (dto.getEmployee() == null) return "Employee is mandatory";
+        if (dto.getProject() == null) return "Project is mandatory";
+        if (dto.getDescription() == null || dto.getDescription().isBlank()) return "Description is mandatory";
+        if (dto.getTime() == null) return "Time is mandatory";
+        if (!"orion".contains(dto.getEmployee().getEmail())) return "Email must be Orion";
+        return null;
+    }
+        public List<ActivityResponseDto> getActivities () {
+            List<Activity> activities = activityRepository.findAll();
+
+            return activities.stream()
+                    .map(ActivityResponseDto::from)
+                    .collect(Collectors.toList());
+        }
+
+
+
+
+    
 }
