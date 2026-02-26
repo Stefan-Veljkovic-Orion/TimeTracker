@@ -17,7 +17,7 @@ public class Employee{
     @ManyToOne
     @JoinColumn(name = "departmentid")
     private Department department;
-    @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "employee")
     private List<Activity> activities;
 
     public Employee(){
