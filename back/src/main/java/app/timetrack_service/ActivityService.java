@@ -71,10 +71,7 @@ public class ActivityService {
                 Employee employee = new EmployeeMapper().toEntity(dto.getEmployee());
 
                 Project project = new ProjectMapper().toEntity(dto.getProject());
-
-
-                Employee employee = dto.getEmployee();
-                Project project = dto.getProject();
+                
                 Activity activity = new Activity();
                 activity.setEmployee(employee);
                 activity.setProject(project);

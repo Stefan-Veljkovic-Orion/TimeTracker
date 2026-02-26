@@ -5,6 +5,5 @@ export const useActivities = () => {
   return useQuery({
     queryKey: ["activities"],
     queryFn: activityService.getAll,
-    staleTime: 5 * 60 * 1000,
   });
 };

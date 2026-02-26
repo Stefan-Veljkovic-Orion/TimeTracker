@@ -5,9 +5,10 @@ export const useUpdateActivity = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }) => activityService.updateActivity(id, data),
+    mutationFn: ({ id, data }) => activityService.update(id, data),
+
     onSuccess: () => {
-      queryClient.invalidateQueries(["activities"]);
+      queryClient.invalidateQueries({ queryKey: ["activities"] });
     },
   });
 };
