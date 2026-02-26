@@ -2,8 +2,6 @@ package app.timetracker_controller;
 
 
 import app.timetrack_service.ProjectService;
-import app.timetracker_dto_implementation.ActivityDto;
-import app.timetracker_dto_implementation.BulkActivityDto;
 import app.timetracker_dto_implementation.BulkProjectDto;
 import app.timetracker_dto_implementation.ProjectDto;
 import app.timetracker_entity_implemantion.Project;
@@ -61,5 +59,21 @@ public class ProjectController {
     public ProjectDto getProjectById(@PathVariable int id) {
         return projectMapper.toDto(projectService.getProjectById(id));
     }
+
+    // UPDATE
+    @PutMapping("/{id}")
+    public ProjectDto updateProject(@PathVariable int id,
+                                    @Valid @RequestBody ProjectDto dto) {
+        Project project = projectMapper.toEntity(dto);
+        Project updated = projectService.updateProject(id, project);
+        return projectMapper.toDto(updated);
+    }
+
+    // DELETE
+    @DeleteMapping("/{id}")
+    public void deleteProject(@PathVariable int id) {
+        projectService.deleteProject(id);
+    }
+
 
 }
