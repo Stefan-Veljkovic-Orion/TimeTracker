@@ -3,10 +3,12 @@ package app.timetrack_service;
 import app.timetrack_repository.IActivityRepository;
 import app.timetrack_repository.IEmployeeRepository;
 import app.timetrack_repository.IProjectRepository;
+import app.timetracker_dto_implementation.*;
 import app.timetracker_dto_implementation.csv.ActivityCSVDto;
 import app.timetracker_dto_implementation.ActivityDto;
 import app.timetracker_dto_implementation.bulk.BulkActivityDto;
 import app.timetracker_dto_implementation.bulk.FailedActivityDto;
+import app.timetracker_dto_implementation.response.ActivityResponseDto;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_entity_implemantion.Project;
@@ -76,6 +78,14 @@ public class ActivityService {
         return new BulkActivityDto(savedIds, failedRecords);
     }
 
+    public List<ActivityResponseDto> getActivities() {
+        List<Activity> activities = activityRepository.findAll();
+
+        return activities.stream()
+                .map(ActivityResponseDto::from)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public Activity create(ActivityDto dto) {
         Project project = projectRepository.findById(dto.getProject().getId())
@@ -104,7 +114,6 @@ public class ActivityService {
             );
         }
     }
-
 
 
     public List<Activity> findActivitiesForEmployee(Integer employeeId, String fromDate, String toDate) {

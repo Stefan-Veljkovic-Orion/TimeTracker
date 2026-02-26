@@ -60,6 +60,11 @@ public class ActivityController {
             csvWriter.close();
     }
 
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ActivityResponseDto>> getAllActivities() {
+        List<ActivityResponseDto> activities = activityService.getActivities();
+        return ResponseEntity.ok(activities);
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ActivityResponseDto> create(
