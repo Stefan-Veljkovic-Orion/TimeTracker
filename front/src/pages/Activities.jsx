@@ -5,6 +5,7 @@ import ActivityFilter from "../components/activities/ActivityFilter";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import ActivityReport from "../components/reports/ActivityReport";
 import { useNavigate } from "react-router-dom";
+import { useDeleteActivity } from "../hooks/useDeleteActivity";
 
 const getTodayDate = () => {
   const today = new Date();
@@ -18,7 +19,15 @@ const Activities = () => {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(getTodayDate());
   const { data: activities = [], isLoading, error } = useActivities();
+  const deleteActivity = useDeleteActivity();
 
+  const handleDelete = async (id) => {
+    try {
+      await deleteActivity.mutateAsync(id);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   const handlePrint = () => {
     window.print();
   };
@@ -67,7 +76,10 @@ const Activities = () => {
       )}
 
       {!isLoading && !error && (
-        <ActivitiesTable activities={filteredActivities} />
+        <ActivitiesTable
+          activities={filteredActivities}
+          onDelete={handleDelete}
+        />
       )}
 
       {/* Aktivnost report za print */}
