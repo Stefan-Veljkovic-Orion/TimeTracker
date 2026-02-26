@@ -27,5 +27,15 @@ public interface IActivityRepository extends JpaRepository<Activity,Integer> {
                 @Param("to") LocalDateTime to
         );
 
+    @Query("""
+        SELECT a
+        FROM Activity a
+        JOIN Employee e ON (a.employee.id = e.id)
+        JOIN Project  p ON (a.project.id = p.id)
+        where a.timeOfActivity >= :cutoffTime
+        ORDER BY a.timeOfActivity DESC
+    """)
+    List<Activity> findAllInLastFiveSeconds(@Param("cutoffTime") LocalDateTime cutoffTime);
+
     boolean existsByEmployee_Id(int id);
 }
