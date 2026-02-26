@@ -1,9 +1,9 @@
 package app.timetracker_controller;
 
-import app.timetracker_dto_implementation.ActivityCSVDto;
+import app.timetracker_dto_implementation.csv.ActivityCSVDto;
 import app.timetracker_dto_implementation.ActivityDto;
-import app.timetracker_dto_implementation.ActivityResponseDto;
-import app.timetracker_dto_implementation.BulkActivityDto;
+import app.timetracker_dto_implementation.response.ActivityResponseDto;
+import app.timetracker_dto_implementation.bulk.BulkActivityDto;
 import app.timetrack_service.ActivityService;
 import app.timetracker_entity_implemantion.Activity;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
-import app.timetracker_mapper.ActivityMapper;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

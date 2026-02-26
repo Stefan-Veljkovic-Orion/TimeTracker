@@ -1,5 +1,6 @@
 package app.timetracker_dto_implementation;
 
+import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Department;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,7 +10,7 @@ import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class EmpolyeeDto {
+public class EmployeeDto {
 
     private int id;
 
@@ -29,12 +30,12 @@ public class EmpolyeeDto {
     @NotNull(message = "Department required")
     private Department department;
 
-    private List<ActivityDto> activities;
+    private List<Activity> activities;
 
-    public EmpolyeeDto() {
+    public EmployeeDto() {
     }
 
-    public EmpolyeeDto(int id, String name, String email, LocalDateTime dateOfEmployment, Department department) {
+    public EmployeeDto(int id, String name, String email, LocalDateTime dateOfEmployment, Department department) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -50,11 +51,11 @@ public class EmpolyeeDto {
         this.id = id;
     }
 
-    public List<ActivityDto> getActivities() {
+    public List<Activity> getActivities() {
         return activities;
     }
 
-    public void setActivities(List<ActivityDto> activities) {
+    public void setActivities(List<Activity> activities) {
         this.activities = activities;
     }
 

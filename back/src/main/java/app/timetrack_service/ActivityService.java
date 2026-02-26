@@ -3,10 +3,10 @@ package app.timetrack_service;
 import app.timetrack_repository.IActivityRepository;
 import app.timetrack_repository.IEmployeeRepository;
 import app.timetrack_repository.IProjectRepository;
-import app.timetracker_dto_implementation.ActivityCSVDto;
+import app.timetracker_dto_implementation.csv.ActivityCSVDto;
 import app.timetracker_dto_implementation.ActivityDto;
-import app.timetracker_dto_implementation.BulkActivityDto;
-import app.timetracker_dto_implementation.FailedActivityDto;
+import app.timetracker_dto_implementation.bulk.BulkActivityDto;
+import app.timetracker_dto_implementation.bulk.FailedActivityDto;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_entity_implemantion.Project;
@@ -99,7 +99,7 @@ public class ActivityService {
         }
     }
 
-private String validate(ActivityDto dto) {
+    private String validate(ActivityDto dto) {
 
         if (dto.getEmployee() == null) return "EmployeeId is mandatory";
         if (dto.getProject() == null) return "ProjectId is mandatory";
