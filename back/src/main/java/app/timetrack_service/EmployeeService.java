@@ -1,5 +1,6 @@
 package app.timetrack_service;
 
+import app.timetrack_repository.IActivityRepository;
 import app.timetrack_repository.IEmployeeRepository;
 import app.timetrack_repository.IDepartmentRepository;
 import app.timetracker_dto_implementation.ActivityDto;
@@ -26,10 +27,15 @@ public class EmployeeService {
     private final IEmployeeRepository employeeRepository;
     private final IDepartmentRepository departmentRepository;
 
+
+    private final IActivityRepository activityRepository;
+
     public EmployeeService(IEmployeeRepository employeeRepository,
-                           IDepartmentRepository departmentRepository) {
+                           IDepartmentRepository departmentRepository,IActivityRepository activityRepository) {
         this.employeeRepository = employeeRepository;
         this.departmentRepository = departmentRepository;
+        this.activityRepository = activityRepository;
+
     }
 
     public Employee saveEmployee(Employee employee, EmployeeDto dto) {
@@ -77,6 +83,7 @@ public class EmployeeService {
         List<Employee> lista = employeeRepository.findAll();
         return  lista.stream().map(e -> new EmployeeCSVDto(e.getId(),e.getName(),e.getEmail(),e.getDateOfEmployment(),e.getDepartment().getDepartmentName())).toList();
     }
+
     public BulkEmployeesDto bulkInsert(List<EmployeeDto> requests) {
 
         List<Integer> savedIds = new ArrayList<>();
@@ -114,5 +121,16 @@ public class EmployeeService {
         if (dto.getName().split(" ").length < 2) return "Employee must have first and last name";
         if (!dto.getEmail().contains("orion")) return "Email must be orion";
         return null;
+    }
+    public void deleteEmployee(int id) {
+        Employee e = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found"));
+
+        if (activityRepository.existsByEmployee_Id(id)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Cannot delete employee with activities");
+        }
+
+        employeeRepository.delete(e);
+
     }
 }

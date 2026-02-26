@@ -1,8 +1,6 @@
 package app.timetracker_controller;
 
 import app.timetrack_service.EmployeeService;
-import app.timetracker_dto_implementation.ActivityDto;
-import app.timetracker_dto_implementation.bulk.BulkActivityDto;
 import app.timetracker_dto_implementation.bulk.BulkEmployeesDto;
 import app.timetracker_dto_implementation.csv.EmployeeCSVDto;
 import app.timetracker_dto_implementation.EmployeeDto;
@@ -72,9 +70,15 @@ public class EmployeeController {
         Employee updated = employeeService.updateEmployee(id, dto);
         return employeeMapper.toDto(updated);
     }
+
     @PostMapping("/bulk-insert")
     public ResponseEntity<BulkEmployeesDto> bulkInsert(@RequestBody List<EmployeeDto> employees) {
         BulkEmployeesDto response = employeeService.bulkInsert(employees);
         return ResponseEntity.ok(response);
+    }
+    @DeleteMapping("/{id}")
+    public void deleteEmployee(@PathVariable int id) {
+        employeeService.deleteEmployee(id);
+
     }
 }
