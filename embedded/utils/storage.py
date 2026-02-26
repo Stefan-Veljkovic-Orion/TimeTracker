@@ -34,40 +34,12 @@ def store_activities_to_db():
         
     api_url = "http://localhost:8080/activities/bulk-insert" 
     
-    formatted_activities =[]
-    
-    
-    today_date = datetime.now().strftime("%Y-%m-%d") 
-    
-    for act in activities:
-        
-        time_str = act.get("time", "00:00")
-        iso_time = f"{today_date}T{time_str}:00.000Z"
-        
-        
-        formatted_act = {
-            "timeOfActivity": iso_time,                 
-            "description": act.get("description"),
-            
-            
-            "employee": {
-                "email": act.get("employee")            
-            },
-            
-            
-            "project": {
-                "projectName": act.get("project")       
-            }
-        }
-        
-        formatted_activities.append(formatted_act)
-    
 
     try:
-        print(f"Slanje {len(formatted_activities)} formatiranih aktivnosti na server...")
+        print(f"Slanje {len(activities)} formatiranih aktivnosti na server...")
         
         
-        response = requests.post(api_url, json=formatted_activities)
+        response = requests.post(api_url, json=activities)
         
         if response.status_code == 200 or response.status_code == 201:
             print("[+] Uspešno sačuvano na Back-End!")

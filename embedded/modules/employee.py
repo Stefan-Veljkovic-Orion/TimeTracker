@@ -14,6 +14,17 @@ def create_employee():
         print("Validation error: Department must be a valid number (ID).")
         return # Prekida ako korisnik nije ukucao broj
     
+    employee_input = input("Enter employee ID (number): ")
+
+    if not employee_input.isdigit():
+        print("Validation error: Employee must be a valid number (ID).")
+        return # Prekida ako korisnik nije ukucao broj
+    
+    project_input = input("Enter project ID (number): ")
+    if not project_input.isdigit():
+        print("Validation error: Employee must be a valid number (ID).")
+        return # Prekida ako korisnik nije ukucao broj
+
     department = int(department_input)
     
     # 1. Osnovna validacija (ime i domen)

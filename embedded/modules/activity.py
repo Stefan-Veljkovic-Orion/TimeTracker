@@ -1,23 +1,33 @@
 from utils.storage import load_data, save_locally, ACTIVITIES_FILE
 from utils.validators import validate_activity
 from models.Activity import Activity
+from datetime import datetime, timezone
 
 def create_activity():
-    email = input("Enter employee mail: ")
-    # TODO da li je u redu da se uzima naziv projekta ili je potrebno project_id?
-    project = input("Enter project name: ")
     description = input("Enter activity description: ")
     # TODO u bazi je datetime a mi primamo samo HH:MM
-    time_of_activity = input("Enter time of activity (HH:MM): ")
+    time_of_activity = datetime.now().isoformat(timespec='seconds')
+
+    employee_input = input("Enter employee ID (number): ")
+
+    if not employee_input.isdigit():
+        print("Validation error: Employee must be a valid number (ID).")
+        return # Prekida ako korisnik nije ukucao broj
     
-    if not validate_activity(email, description, project, time_of_activity):
-        return
+    project_input = input("Enter project ID (number): ")
+
+    if not project_input.isdigit():
+        print("Validation error: Employee must be a valid number (ID).")
+        return # Prekida ako korisnik nije ukucao broj
+    
+    employee = int(employee_input)
+    project = int(project_input)
         
     activity = {
-        "email": email,
-        "project": project,
         "description": description,
-        "time": time_of_activity
+        "time": time_of_activity,
+        "employee_id": employee,
+        "project_id": project
     }
 
     activities = load_data(ACTIVITIES_FILE)

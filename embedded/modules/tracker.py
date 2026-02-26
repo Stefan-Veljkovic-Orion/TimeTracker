@@ -51,7 +51,7 @@ def track_new_activities():
                     seen_activities.add(unique_id)
                     
                     # Formatiranje detalja po zahtevu taska
-                    details = f"[NOVA AKTIVNOST] {act.get('time')} | {act.get('employee')} na '{act.get('project')}': {act.get('description')}"
+                    details = f"[NOVA AKTIVNOST] {act.get('time')} | {act.get('employee').get('name')} na '{act.get('project').get('projectName')}': {act.get('description')}"
                     
                     # 1. Prikaz u terminalu (jednu po jednu)
                     print(details)

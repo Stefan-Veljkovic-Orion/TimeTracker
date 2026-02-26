@@ -13,5 +13,10 @@
     "name": "timetracker",
     "description": "dvdsdsdsfsdf",
     "manager_email": "andja@orion.com"
+  },
+  {
+    "name": "Project1",
+    "description": "New project description",
+    "manager_email": "manager@orion.com"
   }
 ]

@@ -2,12 +2,9 @@ import csv
 import requests
 from datetime import datetime
 from utils.storage import load_data, EMPLOYEES_FILE
-
-
-import csv
-import requests
-from datetime import datetime
+from models.Employee import Employee
 from utils.storage import load_data, save_locally, EMPLOYEES_FILE 
+import json
 
 def sync_employees():
     print("\n--- Syncing Employees with Backend ---")
@@ -16,35 +13,34 @@ def sync_employees():
     local_employees = load_data(EMPLOYEES_FILE)
     
     # Pravimo listu postojećih mejlova da ne bismo ubacili istog radnika dvaput
-    local_emails = {emp.get("email", "").lower() for emp in local_employees}
+    new_emails = []
     
     try:
         # 2. Povlačimo radnike sa baze
         response = requests.get("http://localhost:8080/activities/from-last-five-seconds")
         
         if response.status_code == 200:
-            db_employees = response.json()
             
+            employeeList = json.loads(response.text)
             added_count = 0
             # 3. Dodajemo one iz baze u našu lokalnu listu (ako već nisu tu)
-            for db_emp in db_employees:
-                email = db_emp.get("email", "").lower()
+            for db_emp in employeeList:
+                email = db_emp.get("employee").get("email").lower()
                 
-                if email not in local_emails:
-                    standardizovan_radnik = {
-                        "name": db_emp.get("name"),
-                        "email": db_emp.get("email"),
-                        # Formatiramo datum ako želimo da odstranimo vreme (opciono, ali lepo)
-                        "date_of_employment": str(db_emp.get("date_of_employment")).split(" ")[0], 
-                        
-                        
-                        "department": db_emp.get("departmentid") 
-                    }
+                standardizovan_radnik = {
+                    "name": db_emp.get("employee").get("name"),
+                    "email": db_emp.get("employee").get("email").lower(),
+                    # Formatiramo datum ako želimo da odstranimo vreme (opciono, ali lepo)
+                    "date_of_employment": str(db_emp.get("employee").get("dateOfemployment")).split(" ")[0], 
                     
-                    # Sada dodajemo standardizovanog radnika, a ne sirovog iz baze
-                    local_employees.append(standardizovan_radnik)
-                    local_emails.add(email)
-                    added_count += 1
+                    
+                    "department": db_emp.get("departmentid") 
+                }
+                
+                # Sada dodajemo standardizovanog radnika, a ne sirovog iz baze
+                local_employees.append(standardizovan_radnik)
+                new_emails.append(email)
+                added_count += 1
             
             # 4. ČUVAMO SPOJENU LISTU NAZAD U LOKALNI JSON
             save_locally(EMPLOYEES_FILE, local_employees)
