@@ -12,6 +12,9 @@ import app.timetracker_dto_implementation.response.ActivityResponseDto;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_entity_implemantion.Employee;
 import app.timetracker_entity_implemantion.Project;
+import app.timetracker_mapper.ActivityMapper;
+import app.timetracker_mapper.EmployeeMapper;
+import app.timetracker_mapper.ProjectMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -32,11 +35,16 @@ public class ActivityService {
     private final IActivityRepository activityRepository;
     private final IEmployeeRepository employeeRepository;
     private final IProjectRepository projectRepository;
+    private final ActivityMapper activityMapper;
 
-    public ActivityService(IActivityRepository activityRepository, IEmployeeRepository employeeRepository,IProjectRepository projectRepository) {
+    public ActivityService(IActivityRepository activityRepository,
+                           IEmployeeRepository employeeRepository,
+                           IProjectRepository projectRepository,
+                           ActivityMapper activityMapper) {
         this.activityRepository = activityRepository;
         this.employeeRepository = employeeRepository;
         this.projectRepository = projectRepository;
+        this.activityMapper = activityMapper;
     }
     public List<ActivityCSVDto> getAllActivity(){
         List<Activity> lista = activityRepository.findAll();
@@ -163,4 +171,8 @@ public class ActivityService {
         return null;
     }
 
+    public List<ActivityResponseDto> getActivitiesInLastFiveSeconds() {
+        return activityRepository.findAllInLastFiveSeconds(LocalDateTime.now().minusSeconds(5))
+                .stream().map(activityMapper::toResponse).toList();
+    }
 }

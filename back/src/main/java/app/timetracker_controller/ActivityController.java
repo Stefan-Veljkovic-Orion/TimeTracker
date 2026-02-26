@@ -8,6 +8,8 @@ import app.timetrack_service.ActivityService;
 import app.timetracker_entity_implemantion.Activity;
 import app.timetracker_mapper.ActivityMapper;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -95,6 +98,12 @@ public class ActivityController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/from-last-five-seconds")
+    public ResponseEntity<List<ActivityResponseDto>> getActivitiesInLastFiveSeconds(){
+        return ResponseEntity.ok(activityService.getActivitiesInLastFiveSeconds());
+    }
+
 
 
 }
