@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface IActivityRepository extends JpaRepository<Activity,Integer> {
-
+    boolean existsByProjectId(int id);
 
     @Query("""
         SELECT a
