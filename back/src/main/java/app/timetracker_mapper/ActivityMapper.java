@@ -24,10 +24,10 @@ public class ActivityMapper implements DtoEntityMapper<ActivityDto, Activity> {
         dto.setTime(activity.getTimeOfActivity());
 
         if (activity.getEmployee() != null) {
-            dto.setEmployee(activity.getEmployee());
+            dto.setEmployee(new EmployeeMapper().toDto(activity.getEmployee()));
         }
         if (activity.getProject() != null) {
-            dto.setProject(activity.getProject());
+            dto.setProject(new ProjectMapper().toDto(activity.getProject()));
         }
 
         return dto;
