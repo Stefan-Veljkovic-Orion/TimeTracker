@@ -27,4 +27,5 @@ public interface IActivityRepository extends JpaRepository<Activity,Integer> {
                 @Param("to") LocalDateTime to
         );
 
+    boolean existsByEmployee_Id(int id);
 }
