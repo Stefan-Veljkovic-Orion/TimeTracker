@@ -12,9 +12,11 @@ public class Activity {
     private int id;
     private LocalDateTime timeOfActivity;
     private String description;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "employee_id")
     private Employee employee;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "project_id")
     private Project project;
 
     public Activity(int id, Project project, Employee employee, String description, LocalDateTime timeOfActivity) {
