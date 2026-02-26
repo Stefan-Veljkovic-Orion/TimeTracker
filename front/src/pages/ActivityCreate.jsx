@@ -77,7 +77,7 @@ const ActivityCreate = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-white p-6 rounded shadow mt-6">
+    <div className="max-w-xl mx-auto bg-white p-4 md:p-6 rounded shadow mt-6">
       <h1 className="text-2xl font-bold mb-6">Create Activity</h1>
 
       {errorMessage && (

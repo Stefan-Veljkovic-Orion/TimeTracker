@@ -8,7 +8,7 @@ const navigation = [
   { name: "Departments", href: "/departments", icon: FolderTree },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ closeSidebar }) => {
   return (
     <div className="w-64 bg-gray-900 text-white h-screen fixed left-0 top-0">
       <div className="p-4 text-xl font-bold">Time Tracker</div>
@@ -17,6 +17,7 @@ const Sidebar = () => {
           <NavLink
             key={item.name}
             to={item.href}
+            onClick={closeSidebar}
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-3 hover:bg-gray-800 
           transition ${isActive ? "bg-gray-800 border-l-4 border-blue-500" : ""}`
