@@ -6,12 +6,14 @@ export const activityService = {
     return await activityApi.getByDate(date);
   },
 
-  getActivityById: async (id) => {
-    return await activityApi.getById(id);
+  getById: async (id) => {
+    const res = await apiClient.get("/activities");
+    return res.data.find((a) => a.id === Number(id));
   },
 
-  updateActivity: async (id, data) => {
-    return await activityApi.update({ id, data });
+  update: async (id, payload) => {
+    const res = await apiClient.put(`/activities/${id}`, payload);
+    return res.data;
   },
 
   deleteActivity: async (id) => {
