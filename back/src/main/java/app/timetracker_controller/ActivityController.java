@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.*;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -29,9 +30,11 @@ public class ActivityController {
 
 
     private final ActivityService activityService;
+    private final ActivityMapper activityMapper;
 
-    public ActivityController(ActivityService activityService) {
+    public ActivityController(ActivityService activityService,  ActivityMapper activityMapper) {
         this.activityService = activityService;
+        this.activityMapper = activityMapper;
     }
 
     @PostMapping(value = "/bulk-insert", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -71,6 +74,21 @@ public class ActivityController {
                         .buildAndExpand(saved.getId())
                         .toUri())
                 .body(ActivityResponseDto.from(saved));
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<ActivityResponseDto>> getEmployeeActivities(
+            @PathVariable Integer employeeId,
+            @RequestParam(required = false) String fromDate,
+            @RequestParam(required = false) String toDate) {
+
+        List<Activity> activities = activityService.findActivitiesForEmployee(employeeId, fromDate, toDate);
+
+        List<ActivityResponseDto> response = activities.stream()
+                .map(activityMapper::toResponse)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
 
