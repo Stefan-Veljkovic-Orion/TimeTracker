@@ -1,4 +1,6 @@
-package app.timetracker_dto_implementation;
+package app.timetracker_dto_implementation.bulk;
+
+import app.timetracker_dto_implementation.ActivityDto;
 
 public class FailedActivityDto {
     private ActivityDto activity;

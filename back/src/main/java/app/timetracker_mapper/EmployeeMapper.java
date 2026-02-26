@@ -1,23 +1,23 @@
 package app.timetracker_mapper;
 
-import app.timetracker_dto_implementation.EmpolyeeDto;
+import app.timetracker_dto_implementation.EmployeeDto;
 import app.timetracker_entity_implemantion.Employee;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
 @Component
-public class EmployeeMapper implements DtoEntityMapper<EmpolyeeDto, Employee> {
+public class EmployeeMapper implements DtoEntityMapper<EmployeeDto, Employee> {
 
     @Override
-    public EmpolyeeDto toDto(Employee employee) {
+    public EmployeeDto toDto(Employee employee) {
         if (employee == null) return null;
 
         Integer departmentId = (employee.getDepartment() != null)
                 ? employee.getDepartment().getId()
                 : null;
 
-        EmpolyeeDto dto = new EmpolyeeDto();
+        EmployeeDto dto = new EmployeeDto();
         dto.setId(employee.getId());
         dto.setName(employee.getName());
         dto.setEmail(employee.getEmail());
@@ -32,7 +32,7 @@ public class EmployeeMapper implements DtoEntityMapper<EmpolyeeDto, Employee> {
     }
 
     @Override
-    public Employee toEntity(EmpolyeeDto dto) {
+    public Employee toEntity(EmployeeDto dto) {
         if (dto == null) return null;
 
         Employee employee = new Employee();
