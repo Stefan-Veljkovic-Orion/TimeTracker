@@ -104,6 +104,10 @@ public class ActivityController {
         return ResponseEntity.ok(ActivityResponseDto.from(updated));
     }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        activityService.delete(id);
+        return ResponseEntity.noContent().build();  // 204 No Content
+    }
 }
 

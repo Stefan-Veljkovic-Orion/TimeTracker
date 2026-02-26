@@ -182,6 +182,16 @@ public class ActivityService {
         }
     }
 
+    @Transactional
+    public void delete(Integer id) {
+        Optional<Activity> optionalActivity = activityRepository.findById(id);
+        if (optionalActivity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Activity not found with id: " + id);
+        }
+
+        activityRepository.deleteById(id);
+    }
+
     private String validate(ActivityDto dto) {
 
         if (dto.getEmployee() == null) return "EmployeeId is mandatory";
