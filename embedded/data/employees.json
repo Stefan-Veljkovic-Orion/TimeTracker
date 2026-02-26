@@ -27,5 +27,17 @@
     "email": "milos@orion.com",
     "date_of_employment": "2025-02-15",
     "department": 8
+  },
+  {
+    "name": "Vera",
+    "email": "vera@orion.com",
+    "date_of_employment": "None",
+    "department": null
+  },
+  {
+    "name": "Andjelija Djuric",
+    "email": "andja@orion.com",
+    "date_of_employment": "2024-05-22",
+    "department": 2
   }
 ]

@@ -1,6 +1,8 @@
 
 import time
 from datetime import datetime
+
+import requests
 from utils.storage import load_data, ACTIVITIES_FILE
 
 def track_new_activities():
@@ -30,13 +32,18 @@ def track_new_activities():
     try:
         # Glavna beskonacna petlja (Polling)
         while True:
-            # KADA STIGNE API, OVO MENJAS SA: response = requests.get('...') i activities = response.json()
-            activities = load_data(ACTIVITIES_FILE)
+           
+            try:
+                response = requests.get("http://localhost:8080/activities")
+                activities = response.json()
+            except Exception as e:
+                print(f"Greška pri konekciji sa API-jem: {e}")
+                return
 
             # Prolazimo kroz sve dobijene aktivnosti
             for act in activities:
-                # (Kada BE napravi API, trazi da ti salju polje "id" pa ce ovo biti: unique_id = act['id'])
-                unique_id = f"{act.get('employee')}_{act.get('time')}_{act.get('project')}"
+                
+                unique_id = act['id']
                 
                 # Ako je ID nov (nismo ga do sada videli)
                 if unique_id not in seen_activities:

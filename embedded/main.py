@@ -1,9 +1,10 @@
 # Uvozimo funkcije iz naših modula
-from modules.activity import create_activity, store_activities
-from modules.employee import create_employee
+from modules.activity import create_activity, print_activities_on_console
+from modules.employee import create_employee 
 from modules.project import create_project
-from modules.sync_export import sync_employees
+from modules.sync_export import sync_employees, export_employees_to_csv
 from modules.tracker import track_new_activities
+from utils.storage import store_activities_to_db
 
 def main_menu():
     while True:
@@ -25,11 +26,13 @@ def main_menu():
         elif choice == "3":
             create_project()
         elif choice == "4":
-            store_activities()
+            store_activities_to_db()
         elif choice == "5":
             track_new_activities()
+            print_activities_on_console()
         elif choice == "6":
             sync_employees()
+            export_employees_to_csv() 
         elif choice == "7":
             print("Exiting...")
             break

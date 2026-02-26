@@ -8,11 +8,11 @@ import requests
 import json
  
 # Učitavanje lokalnih aktivnosti (pretpostavka da ih čuvaš u fajlu)
-with open('../data/activities.json', 'r') as file:
+with open('data/activities.json', 'r') as file:
     activities_data = json.load(file)
  
 # URL vašeg Back-End API-ja (ovo treba da dogovoriš sa BE timom)
-api_url = "http://127.0.0.1:8080/activities/bulk-insert"
+api_url = "http://localhost:8080/activities/bulk-insert"
  
 try:
     # Slanje JSON podataka na Bekend putem POST zahteva

@@ -2,7 +2,6 @@ from utils.storage import load_data, save_locally, PROJECTS_FILE
 from utils.validators import validate_project
 
 
-
 # function for creating a project
 def create_project():
     name = input("Enter project name: ")

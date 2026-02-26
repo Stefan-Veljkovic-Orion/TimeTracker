@@ -8,5 +8,10 @@
     "name": "pr",
     "description": "pr",
     "manager_email": "d@orion.com"
+  },
+  {
+    "name": "timetracker",
+    "description": "dvdsdsdsfsdf",
+    "manager_email": "andja@orion.com"
   }
 ]

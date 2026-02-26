@@ -1,7 +1,7 @@
 from utils.storage import load_data, save_locally, EMPLOYEES_FILE
 from utils.validators import validate_employee
-from models.Employee import Employee
 import json
+from models import Employee
 
 def create_employee():
     print("\n--- Create New Employee ---")
@@ -40,7 +40,4 @@ def create_employee():
     save_locally(EMPLOYEES_FILE, employees)
     print(f"Success! Employee {name} ({email}) created successfully.")
 
-def load_employees():
-    with open("./../data/employees.json",'r', encoding='UTF-8') as file:
-        employeeList: list[Employee] = json.load(file)
-        #store_data(employeeList)
+

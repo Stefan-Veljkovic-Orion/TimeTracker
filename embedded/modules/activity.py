@@ -1,5 +1,6 @@
 from utils.storage import load_data, save_locally, ACTIVITIES_FILE
 from utils.validators import validate_activity
+from models.Activity import Activity
 
 def create_activity():
     email = input("Enter employee mail: ")
@@ -26,12 +27,8 @@ def create_activity():
     print("Activity saved locally")
 
 
-def store_activities():
-    # global activities_temp
-    pass
     
-
-def track_new_activities():
+def print_activities_on_console():
     activities = load_data(ACTIVITIES_FILE)
     print("\n--- Today's Activities ---")
     if not activities:
