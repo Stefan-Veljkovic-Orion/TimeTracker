@@ -5,7 +5,6 @@ import ConfirmDeleteModal from "../common/ConfirmDeleteModal";
 
 const ActivitiesTable = ({ activities, onDelete }) => {
   const navigate = useNavigate();
-
   const [selectedId, setSelectedId] = useState(null);
 
   const openDeleteModal = (e, id) => {
@@ -34,8 +33,9 @@ const ActivitiesTable = ({ activities, onDelete }) => {
 
   return (
     <>
-      <div className="overflow-x-auto bg-white rounded-lg shadow">
-        <table className="min-w-full divide-y divide-gray-200">
+      {/* DESKTOP TABLE */}
+      <div className="hidden md:block w-full overflow-x-auto bg-white rounded-lg shadow">
+        <table className="min-w-[1100px] w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -127,6 +127,70 @@ const ActivitiesTable = ({ activities, onDelete }) => {
         </table>
       </div>
 
+      {/* MOBILE CARDS */}
+      <div className="md:hidden flex flex-col gap-4">
+        {activities.map((activity) => (
+          <div
+            key={activity.id}
+            className="bg-white border rounded-lg p-4 shadow-sm"
+          >
+            <div
+              className="cursor-pointer"
+              onClick={() => navigate(`/activities/${activity.id}`)}
+            >
+              <div className="font-semibold text-lg text-gray-900">
+                {activity.employee?.name || "Unknown"}
+              </div>
+
+              <div className="text-sm text-gray-500 mb-2">
+                {activity.employee?.email || "—"}
+              </div>
+
+              <div className="text-sm">
+                <span className="font-medium">Project:</span>{" "}
+                {activity.project?.projectName || "—"}
+              </div>
+
+              <div className="text-sm">
+                <span className="font-medium">Project ID:</span>{" "}
+                {activity.project?.id || "—"}
+              </div>
+
+              <div className="text-sm">
+                <span className="font-medium">Time:</span>{" "}
+                {activity.time
+                  ? new Date(activity.time).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : "—"}
+              </div>
+
+              <div className="text-sm mt-1">
+                <span className="font-medium">Description:</span>{" "}
+                {activity.description || "—"}
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={() => navigate(`/activities/${activity.id}`)}
+                className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+              >
+                Edit
+              </button>
+
+              <button
+                onClick={(e) => openDeleteModal(e, activity.id)}
+                className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
       {selectedId && (
         <ConfirmDeleteModal onConfirm={confirmDelete} onCancel={closeModal} />
       )}
@@ -135,22 +199,7 @@ const ActivitiesTable = ({ activities, onDelete }) => {
 };
 
 ActivitiesTable.propTypes = {
-  activities: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      employee: PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        email: PropTypes.string,
-      }),
-      project: PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-      }),
-      time_of_activity: PropTypes.string.isRequired,
-      description: PropTypes.string,
-    }),
-  ).isRequired,
+  activities: PropTypes.array.isRequired,
   onDelete: PropTypes.func,
 };
 
