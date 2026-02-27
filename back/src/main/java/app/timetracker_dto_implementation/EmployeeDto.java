@@ -28,7 +28,6 @@ public class EmployeeDto {
 
     private LocalDateTime dateOfEmployment;
 
-    @JsonIgnore
     private Department department;
 
     @JsonIgnore

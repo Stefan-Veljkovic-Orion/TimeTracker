@@ -1,6 +1,6 @@
 # Uvozimo funkcije iz naših modula
 from modules.activity import create_activity, print_activities_on_console
-from modules.employee import create_employee 
+from modules.employee import create_employee
 from modules.project import create_project
 from modules.sync_export import sync_employees, export_employees_to_csv
 from modules.tracker import track_new_activities
@@ -10,6 +10,8 @@ import uvicorn
 import time as time_module
 from ai.server import app as ai_app
 from ai.generate_activities import run_generate_activities_cli
+from ai.generate_employees import run_generate_employees_cli
+
 
 def main_menu():
     config = uvicorn.Config(ai_app, host="0.0.0.0", port=8001, log_level="info")
@@ -29,10 +31,11 @@ def main_menu():
         print("5. Track new activities today")
         print("6. Sync Employees with backend")
         print("7. [AI] Generate activities")
-        print("8. Exit")
- 
+        print("8. [AI] Generate employees")
+        print("9. Exit")
+
         choice = input("Choose an option: ")
- 
+
         if choice == "1":
             create_activity()
         elif choice == "2":
@@ -48,8 +51,10 @@ def main_menu():
             sync_employees()
             export_employees_to_csv()
         elif choice == "7":
-            run_generate_activities_cli() 
+            run_generate_activities_cli()
         elif choice == "8":
+            run_generate_employees_cli()
+        elif choice == "9":
             print("Exiting...")
             break
         else:
