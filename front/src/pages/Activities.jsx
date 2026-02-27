@@ -240,6 +240,9 @@ const Activities = () => {
           >
             Create Activity
           </button>
+          <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow-sm transition">
+            Generate data
+          </button>
 
           <button
             onClick={handleDownloadPdf}
