@@ -9,6 +9,7 @@ import { useDeleteActivity } from "../hooks/useDeleteActivity";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import logo from "../assets/Orion_Innovation_Logo.jpg";
+import { useGenerateActivities } from "../hooks/useGenerateActivities";
 
 const getTodayDate = () => {
   const today = new Date();
@@ -23,10 +24,19 @@ const Activities = () => {
   const [selectedDate, setSelectedDate] = useState(getTodayDate());
   const { data: activities = [], isLoading, error } = useActivities();
   const deleteActivity = useDeleteActivity();
+  const generateActivities = useGenerateActivities();
 
   const handleDelete = async (id) => {
     try {
       await deleteActivity.mutateAsync(id);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleGenerateActivities = async () => {
+    try {
+      await generateActivities.mutateAsync();
     } catch (err) {
       console.error(err);
     }
@@ -240,8 +250,11 @@ const Activities = () => {
           >
             Create Activity
           </button>
-          <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow-sm transition">
-            Generate data
+          <button
+            onClick={handleGenerateActivities}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md shadow-sm transition"
+          >
+            Generate Activities - AI
           </button>
 
           <button
