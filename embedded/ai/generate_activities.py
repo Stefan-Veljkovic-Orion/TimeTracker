@@ -10,7 +10,7 @@ from .api_client import ApiClient
 
 
 def load_descriptions() -> List[str]:
-    path = Path(__file__).parent / "data" / "descriptions.json"
+    path = Path(__file__).parent / "data_set" / "descriptions.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     descriptions = [str(d).strip() for d in data if str(d).strip()]
     if not descriptions:
