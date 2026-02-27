@@ -9,7 +9,7 @@ from models.Employee import Employee
 
 
 def load_names() -> List[str]:
-    path = Path(__file__).parent / "data" / "names.json"
+    path = Path(__file__).parent / "data_set" / "names.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     names = [str(n).strip() for n in data if str(n).strip()]
     if not names:
