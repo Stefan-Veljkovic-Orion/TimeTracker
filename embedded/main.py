@@ -5,8 +5,21 @@ from modules.project import create_project
 from modules.sync_export import sync_employees, export_employees_to_csv
 from modules.tracker import track_new_activities
 from utils.storage import store_activities_to_db
+import threading
+import uvicorn
+import time as time_module
+from ai.server import app as ai_app
+from ai.generate_activities import run_generate_activities_cli
 
 def main_menu():
+    config = uvicorn.Config(ai_app, host="0.0.0.0", port=8001, log_level="info")
+    server = uvicorn.Server(config)
+
+    threading.Thread(target=server.run, daemon=True).start()
+
+    while not server.started:
+        time_module.sleep(0.01)
+
     while True:
         print("\n--- Time Tracker: Embedded Application ---")
         print("1. Create Activity")
@@ -15,7 +28,8 @@ def main_menu():
         print("4. Store activities on DB")
         print("5. Track new activities today")
         print("6. Sync Employees with backend")
-        print("7. Exit")
+        print("7. [AI] Generate activities")
+        print("8. Exit")
  
         choice = input("Choose an option: ")
  
@@ -32,12 +46,15 @@ def main_menu():
             print_activities_on_console()
         elif choice == "6":
             sync_employees()
-            export_employees_to_csv() 
+            export_employees_to_csv()
         elif choice == "7":
+            run_generate_activities_cli() 
+        elif choice == "8":
             print("Exiting...")
             break
         else:
             print("Invalid choice, try again.")
+
 
 if __name__ == "__main__":
     main_menu()
