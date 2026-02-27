@@ -1,6 +1,8 @@
-import datetime
+from dataclasses import dataclass
+
+@dataclass
 class Activity:
-    name:str
-    date_of_employment: datetime
-    departmentid: int
-    email: str
+    time: str
+    employee_id: int
+    description: str
+    project_id: int
