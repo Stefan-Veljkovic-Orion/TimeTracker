@@ -1,4 +1,4 @@
 .mvn
-.idea
+.idea/
 ../.idea
-target
+target/
