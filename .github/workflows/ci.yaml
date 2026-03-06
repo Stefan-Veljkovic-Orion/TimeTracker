@@ -33,21 +33,21 @@ jobs:
         run: mvn -B package --file back/pom.xml
       - name: Test with Maven
         run: DB_HOST=localhost mvn test -f back/pom.xml -Dtest=com.orion.timetracker.main.**
-    frontend-testing:
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          node-version: [ 18.x, 20.x, 22.x ]
-          # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+  frontend-testing:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18.x, 20.x, 22.x ]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
-        steps:
-          - uses: actions/checkout@v4
-          - name: Use Node.js ${{ matrix.node-version }}
-            uses: actions/setup-node@v4
-            with:
-              node-version: ${{ matrix.node-version }}
-              cache: 'npm'
-          - name: Install project
-            run: npm  --prefix front/ install
-          - name: Tests project
-            run: npm --prefix front/ test front/src/__tests__
+      steps:
+        - uses: actions/checkout@v4
+        - name: Use Node.js ${{ matrix.node-version }}
+          uses: actions/setup-node@v4
+          with:
+            node-version: ${{ matrix.node-version }}
+            cache: 'npm'
+        - name: Install project
+          run: npm  --prefix front/ install
+        - name: Tests project
+          run: npm --prefix front/ test front/src/__tests__
