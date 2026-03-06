@@ -1,0 +1,38 @@
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Test check with maven
+
+on:
+  push:
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0 # Specify the version you need
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: timetracker
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3 # Health check for the service
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B package --file back/pom.xml
+      - name: Test with Maven
+        run: mvn clean test -f back/pom.xml -Dtest=com.orion.timetracker.main.**
+
+    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
