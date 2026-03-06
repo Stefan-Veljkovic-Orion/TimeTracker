@@ -33,6 +33,7 @@ jobs:
         run: mvn -B package --file back/pom.xml
       - name: Test with Maven
         run: DB_HOST=localhost mvn test -f back/pom.xml -Dtest=com.orion.timetracker.main.**
+
   frontend-testing:
     runs-on: ubuntu-latest
     strategy:
@@ -45,7 +46,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: "./front/package-lock.json"
     - name: Install project
-      run: npm  --prefix front/ install
+      run: npm --prefix front/ install
     - name: Tests project
       run: npm --prefix front/ test front/src/__tests__
