@@ -1,2 +1,2 @@
 def test_answer():
-    assert true == true
+    assert True == True
