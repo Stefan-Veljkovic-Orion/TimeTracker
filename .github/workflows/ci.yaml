@@ -68,7 +68,7 @@ jobs:
     - name: Prepare project (installing dependencies)
       run: |
         pip install --upgrade pip
-        pip -m venv embedded/.venv
+        python -m venv embedded/.venv
         source embedded/.venv/bin/activate
         pip install -r embedded/requirements.txt
         pip install flake8 pytest
