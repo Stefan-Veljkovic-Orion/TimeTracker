@@ -80,4 +80,4 @@ jobs:
         # flake8 embedded/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test project
       run: |
-        pytest embedded/tests
+        pytest embedded/tests/*
