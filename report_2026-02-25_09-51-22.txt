@@ -1,6 +1,0 @@
- Activity Report started at 2026-02-25 09:51:22
-
-[NOVA AKTIVNOST] 12:23 | None na 'd': d
-[NOVA AKTIVNOST] 12:34 | None na 'd': d
-[NOVA AKTIVNOST] 12:56 | None na 'd': d
-[NOVA AKTIVNOST] 12:23 | None na 'pr': pr
